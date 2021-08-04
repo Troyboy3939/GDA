@@ -8,6 +8,8 @@ public:
 	Action();
 	~Action();
 
+
+	float GetCost();
 private:
 
 	//list of world states that this action requires
@@ -18,5 +20,6 @@ private:
 
 
 	float m_fCost;
+
 };
 

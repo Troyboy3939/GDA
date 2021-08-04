@@ -7,7 +7,7 @@ public:
 	~Goal();
 
 
-
+	std::string GetRequiredWorldState();
 
 private:
 	std::string m_sReqWorldState;
