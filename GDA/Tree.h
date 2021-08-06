@@ -10,6 +10,19 @@ class Tree
 {
 public:
 	
+	struct Node1
+	{
+		//pointer to the goal/action
+		Action* m_pAction;
+		Goal* m_pGoal;
+
+		//parent node
+		Node1* m_pParent;
+		
+		float m_fGscore;
+		float m_fHscore;
+
+	};
 	
 	//----------------------------------------
 	//Constructor/Destructors
@@ -22,11 +35,11 @@ public:
 
 
 	//----------------------------------------
-	//Adds an action onto the tree structure
+	//Adds an action onto the tree structure, returns the node created
 	//----------------------------------------
-	void AddAction(Action* pAction, Node* pParent);
+	Node* AddAction(Action* pAction, Node* pParent);
 
-
+	void AddNode(Node* pNode, Node* pParent);
 	//----------------------------------------
 	//Clears the entire tree
 	//----------------------------------------

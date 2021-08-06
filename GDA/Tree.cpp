@@ -19,15 +19,14 @@ Tree::~Tree()
 {
 }
 
-void Tree::AddAction(Action* pAction, Node* pParent)
+
+
+void Tree::AddNode(Node* pNode, Node* pParent)
 {
-	//Create Node
-	//						Action, goal, isAct, 
-	Node* pNode = new Node{ pAction,nullptr,true,pParent};
+	pParent->AddChild(pNode);
 
-	//add to parent
-	pParent->m_apChildren.push_back(pNode);
 
+	pNode->SetParent(pParent);
 
 }
 

@@ -31,6 +31,8 @@ void Heap::Add(Node* pNode)
 	}
 }
 
+
+
 Node* Heap::GetTop()
 {
 	if (m_aNodes.size() == 0)

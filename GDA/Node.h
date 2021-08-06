@@ -7,22 +7,37 @@ class Goal;
 class Node
 {
 public:
-	void CreateAction(Action* pAction, Node* pParent);
-	void CreateGoal(Goal* pGoal);
+
+	Node();
+
+	void SetParent(Node* pNode);
+
 
 
 	float GetFScore();
 	float GetGScore();
 	float GetHScore();
+
+	std::vector<Node*>& GetChildren();
+	std::vector<std::string> GetReqWS();
+
+	void SetReqWS(std::vector<std::string> asReqWS);
+
+	void AddReqWS(std::string sWS);
+	
+
+	void SetGScore(float fGscore);
+	void SetHScore(float fHscore);
+
+	void AddChild(Node* pNode);
 private:
 	Action* m_pAction;
 	Goal* m_pGoal;
-	bool m_bIsAction;
 	Node* m_pParent;
 	std::vector<Node*> m_apChildren;
+	std::vector<std::string> m_asReqWS;
 
 	//Scores for A*
-	float m_fFScore;
 	float m_fGScore;
 	float m_fHScore;
 	
