@@ -69,3 +69,18 @@ void Node::AddChild(Node* pNode)
 {
 	m_apChildren.push_back(pNode);
 }
+
+Action* Node::GetAction()
+{
+	return m_pAction;
+}
+
+Goal* Node::GetGoal()
+{
+	return m_pGoal;
+}
+
+Node* Node::GetParent()
+{
+	return m_pParent;
+}

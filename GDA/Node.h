@@ -30,6 +30,13 @@ public:
 	void SetHScore(float fHscore);
 
 	void AddChild(Node* pNode);
+
+
+	Action* GetAction();
+	Goal* GetGoal();
+
+
+	Node* GetParent();
 private:
 	Action* m_pAction;
 	Goal* m_pGoal;

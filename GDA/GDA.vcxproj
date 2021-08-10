@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -143,6 +143,9 @@
     <ClInclude Include="Goal.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="Manager.h" />
+    <ClInclude Include="Message.h" />
+    <ClInclude Include="MessageBase.h" />
+    <ClInclude Include="Messenger.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Planner.h" />
     <ClInclude Include="PlansOverseer.h" />
@@ -153,6 +156,9 @@
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Heap.cpp" />
     <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="Message.cpp" />
+    <ClCompile Include="MessageBase.cpp" />
+    <ClCompile Include="Messenger.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Planner.cpp" />
     <ClCompile Include="PlansOverseer.cpp" />
