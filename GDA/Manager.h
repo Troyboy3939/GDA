@@ -1,5 +1,7 @@
 #pragma once
-class Manager
+#include "Messenger.h"
+class Manager :
+    public Messenger
 {
 };
 
