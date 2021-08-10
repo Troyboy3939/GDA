@@ -39,6 +39,18 @@
     <ClInclude Include="Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Messenger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GoalBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PlansOverseer.cpp">
@@ -53,9 +65,6 @@
     <ClCompile Include="Action.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Goal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Tree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,6 +72,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Message.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Messenger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GoalBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,10 +2,14 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <functional>
+
+class Manager;
+
 class Action
 {
 public:
-	Action();
+	Action(float fCost, std::function<bool(Manager* pManager)>* pIsValidFunction);
 	Action(float fCost);
 	~Action();
 
@@ -36,6 +40,18 @@ public:
 	std::unordered_map<std::string, bool> GetEffects();
 
 
+	//------------------------------------
+	// Calls the function pointer. Determines
+	// whether an action can be completed 
+	// or not
+	//------------------------------------
+	bool IsValid(Manager* pManager);
+
+
+	//------------------------------------
+	// Resets IsValid() to another function
+	//------------------------------------
+	void SetIsValidFunction(std::function<bool(Manager* pManager)>* pIsValidFunction );
 private:
 
 	//list of world states that this action requires
@@ -49,6 +65,9 @@ private:
 
 	//cost of performing this action
 	float m_fCost;
+
+	//function pointer to check whether the action can be completed or not
+	std::function<bool(Manager* pManager)>* m_pIsValid;
 
 };
 
