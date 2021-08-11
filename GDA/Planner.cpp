@@ -3,6 +3,8 @@
 #include "Heap.h"
 #include "Manager.h"
 #include "Node.h"
+
+
 Planner::Planner()
 {
 	//Create a tree
@@ -18,7 +20,7 @@ Planner::~Planner()
 	//----------------------------------------
 	// Creates a plan and expectations for lists passed in
 	//----------------------------------------
-bool Planner::GetPlan(Manager* pManager, std::vector<Action*>& rapAvailableActions, std::vector<Action*>& rapPlan, std::map<std::string, bool>& rExpectedWorldState)
+bool Planner::GetPlan(Manager* pManager, std::vector<ActionBase*>& rapAvailableActions, std::vector<ActionBase*>& rapPlan, std::map<std::string, bool>& rExpectedWorldState)
 {
 
 	//-----------------------------------------------------------------------------------------
@@ -26,7 +28,7 @@ bool Planner::GetPlan(Manager* pManager, std::vector<Action*>& rapAvailableActio
 	//-----------------------------------------------------------------------------------------
 
 	//Get a pointer to the goal of the manager
-	Goal* pGoal = pManager->GetGoal();
+	GoalBase* pGoal = pManager->GetGoal();
 
 
 
@@ -64,7 +66,7 @@ bool Planner::GetPlan(Manager* pManager, std::vector<Action*>& rapAvailableActio
 	for (int i = 0; i < rapAvailableActions.size(); i++)
 	{
 		//pointer to the action
-		Action* pAction = rapAvailableActions[i];
+		ActionBase* pAction = rapAvailableActions[i];
 
 		//find out what the satisfied world state is
 		const std::string& sSat = pAction->GetSatWS();
@@ -154,7 +156,7 @@ bool Planner::GetPlan(Manager* pManager, std::vector<Action*>& rapAvailableActio
 		for (int i = 0; i < rapAvailableActions.size(); i++)
 		{
 			//pointer to the action
-			Action* pAction = rapAvailableActions[i];
+			ActionBase* pAction = rapAvailableActions[i];
 
 			//find out what the satisfied world state is
 			const std::string& sSat = pAction->GetSatWS();

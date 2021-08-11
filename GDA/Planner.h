@@ -25,7 +25,7 @@ public:
 	//----------------------------------------
 	//Creates a Plan using Available Actions 
 	//----------------------------------------
-	bool GetPlan(Manager* pManager, std::vector<Action*>& rapAvailableActions, std::vector<Action*>& rapPlan, std::map<std::string,bool>& rExpectedWorldState);
+	bool GetPlan(Manager* pManager, std::vector<ActionBase*>& rapAvailableActions, std::vector<ActionBase*>& rapPlan, std::map<std::string,bool>& rExpectedWorldState);
 
 
 

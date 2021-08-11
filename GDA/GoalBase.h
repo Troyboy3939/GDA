@@ -23,12 +23,6 @@ public:
 	virtual bool IsValid(Manager* pManager) = 0;
 
 
-	//------------------------------------
-	// Resets IsValid() to another function
-	//------------------------------------
-	void SetIsValidFunction(std::function<bool(Manager* pManager)>* pIsValidFunction);
-
-
 protected:
 
 	
@@ -38,7 +32,7 @@ protected:
 	// it has access to the Goal::m_pData
 	//------------------------------------
 	template<typename Data>
-	void Init(std::string sReqWS, std::function<bool(Manager* pManager, Data* pData)>* pIsValidFunction)
+	void Init(std::string sReqWS, std::function<bool(Manager* pManager, Data data)>* pIsValidFunction)
 	{
 		m_sReqWorldState = sReqWS;
 		m_pIsValid = pIsValidFunction;

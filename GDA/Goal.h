@@ -28,35 +28,32 @@ public:
 	}
 
 	//------------------------------------
-	// Initialiser
+	// Initialiser. NULL in case non-pointer value passed in
 	//------------------------------------
-	void Init(std::string sReqWS, std::function<bool(Manager* pManager, Data* pData)>* pIsValidFunction, Data* pData = nullptr) 
+	void Init(std::string sReqWS, std::function<bool(Manager* pManager, Data* pData)>* pIsValidFunction, Data data = NULL) 
 	{
 
-		std::function<bool(Manager* pManager, Data* pData)> pIsVal = [pIsValidFunction](Manager* pManager, Data* pData) -> bool { return pIsValidFunction(pManager, pData); };
+		GoalBase::Init(sReqWS, pIsValidFunction);
 
-
-		GoalBase::Init(sReqWS, pIsVal);
-
-		m_pData = pData;
+		m_Data = data;
 	}
 
 	Data* GetData()
 	{
-		return m_pData;
+		return m_Data;
 	}
 
-	void SetData(Data* pData)
+	void SetData(Data data)
 	{
-		m_pData = pData;
+		m_Data = data;
 	}
 
 	bool IsValid(Manager* pManager)
 	{
-		return (*m_pIsValid)(pManager,m_pData);
+		return (*m_pIsValid)(pManager,m_Data);
 	}
 
 private:
-	Data* m_pData;
+	Data m_Data;
 };
 
