@@ -1,16 +1,59 @@
 #pragma once
 #include <string>
-class Goal
+#include <functional>
+#include "GoalBase.h"
+class Manager;
+
+template<typename Data = bool>
+class Goal : public GoalBase
 {
 public:
-	Goal();
-	~Goal();
 
+	//------------------------------------
+	// Empty Constructor. Has to be initialised 
+	// using Init()
+	//------------------------------------
+	Goal()
+	{
 
-	std::string GetRequiredWorldState();
+	}
+	
+
+	//------------------------------------
+	// Destructor
+	//------------------------------------
+	~Goal()
+	{
+
+	}
+
+	//------------------------------------
+	// Initialiser. NULL in case non-pointer value passed in
+	//------------------------------------
+	void Init(std::string sReqWS, std::function<bool(Manager* pManager, Data* pData)>* pIsValidFunction, Data data = NULL) 
+	{
+
+		GoalBase::Init(sReqWS, pIsValidFunction);
+
+		m_Data = data;
+	}
+
+	Data* GetData()
+	{
+		return m_Data;
+	}
+
+	void SetData(Data data)
+	{
+		m_Data = data;
+	}
+
+	bool IsValid(Manager* pManager)
+	{
+		return (*m_pIsValid)(pManager,m_Data);
+	}
 
 private:
-	std::string m_sReqWorldState;
-	
+	Data m_Data;
 };
 

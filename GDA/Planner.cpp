@@ -1,8 +1,10 @@
 #include "Planner.h"
 #include "Tree.h"
 #include "Heap.h"
-
+#include "Manager.h"
 #include "Node.h"
+
+
 Planner::Planner()
 {
 	//Create a tree
@@ -18,8 +20,18 @@ Planner::~Planner()
 	//----------------------------------------
 	// Creates a plan and expectations for lists passed in
 	//----------------------------------------
-bool Planner::GetPlan(Goal* pGoal, std::vector<Action*>& rapAvailableActions, std::vector<Action*>& rapPlan, std::map<std::string, bool>& rExpectedWorldState)
+bool Planner::GetPlan(Manager* pManager, std::vector<ActionBase*>& rapAvailableActions, std::vector<ActionBase*>& rapPlan, std::map<std::string, bool>& rExpectedWorldState)
 {
+
+	//-----------------------------------------------------------------------------------------
+	// Set up variables needed for A* / GOAP
+	//-----------------------------------------------------------------------------------------
+
+	//Get a pointer to the goal of the manager
+	GoalBase* pGoal = pManager->GetGoal();
+
+
+
 	//Set up the tree
 	m_pTree->Clear();
 	m_pTree->SetGoal(pGoal);
@@ -54,40 +66,45 @@ bool Planner::GetPlan(Goal* pGoal, std::vector<Action*>& rapAvailableActions, st
 	for (int i = 0; i < rapAvailableActions.size(); i++)
 	{
 		//pointer to the action
-		Action* pAction = rapAvailableActions[i];
+		ActionBase* pAction = rapAvailableActions[i];
 
 		//find out what the satisfied world state is
 		const std::string& sSat = pAction->GetSatWS();
 
+
+
 		//if the required world state of the goal is met by the action, then
 		if (sReq.compare(sSat) == 0)
 		{
-			Node* pNewNode = new Node();
+			//Make sure the action is valid  (no point checking a route if the action cannot be undertaken)
+			if (pAction->IsValid(pManager))
+			{
+				Node* pNewNode = new Node();
 
-			//get a reference to the required world states
-			const std::vector<std::string>& rasReqWS = pAction->GetReqWS();
-
-
-
-			//create a copy of the world states so that world states can be added to the node if needed (without affecting the action)
-			pNewNode->SetReqWS(rasReqWS);
-
-			//Setup A* scores
+				//get a reference to the required world states
+				const std::vector<std::string>& rasReqWS = pAction->GetReqWS();
 
 
-			//G score is simply the cost of the action 
-			pNewNode->SetGScore(pAction->GetCost());
 
-			//THe hueristic is simply the number of left over world states
-			pNewNode->SetHScore(rasReqWS.size());
+				//create a copy of the world states so that world states can be added to the node if needed (without affecting the action)
+				pNewNode->SetReqWS(rasReqWS);
 
-			//Add node to the tree 
-			m_pTree->AddNode(pNewNode, pNode);
+				//Setup A* scores
 
-			//Add it to the open list
-			m_pOpenList->Add(pNewNode);
-			
 
+				//G score is simply the cost of the action 
+				pNewNode->SetGScore(pAction->GetCost());
+
+				//THe hueristic is simply the number of left over world states
+				pNewNode->SetHScore(rasReqWS.size());
+
+				//Add node to the tree 
+				m_pTree->AddNode(pNewNode, pNode);
+
+				//Add it to the open list
+				m_pOpenList->Add(pNewNode);
+
+			}
 		}
 		
 	}
@@ -139,7 +156,7 @@ bool Planner::GetPlan(Goal* pGoal, std::vector<Action*>& rapAvailableActions, st
 		for (int i = 0; i < rapAvailableActions.size(); i++)
 		{
 			//pointer to the action
-			Action* pAction = rapAvailableActions[i];
+			ActionBase* pAction = rapAvailableActions[i];
 
 			//find out what the satisfied world state is
 			const std::string& sSat = pAction->GetSatWS();
@@ -156,46 +173,51 @@ bool Planner::GetPlan(Goal* pGoal, std::vector<Action*>& rapAvailableActions, st
 				//if the action meets the requirement being looked at,
 				if (sSat.compare(sReq) == 0)
 				{
-					Node* pNewNode = new Node();
 
-					//get a reference to the required world states of the soon to be child
-					const std::vector<std::string>& rasReqWS = pAction->GetReqWS();
-
-
-
-					//create a copy of the world states so that world states can be added to the node if needed (without affecting the action)
-					pNewNode->SetReqWS(rasReqWS);
-
-					//for every requirement the current node has.
-					for (int k = 0; k < asReqLis.size(); k++)
+					//Make sure the action is valid (no point checking a route if the action cannot be undertaken)
+					if (pAction->IsValid(pManager))
 					{
+						Node* pNewNode = new Node();
 
-						//make sure its a different world state (.compare == 0 means true)
-						if (asReqLis[i].compare(sSat))
+						//get a reference to the required world states of the soon to be child
+						const std::vector<std::string>& rasReqWS = pAction->GetReqWS();
+
+
+
+						//create a copy of the world states so that world states can be added to the node if needed (without affecting the action)
+						pNewNode->SetReqWS(rasReqWS);
+
+						//for every requirement the current node has.
+						for (int k = 0; k < asReqLis.size(); k++)
 						{
-							//Add required world state from current node to child node
-							pNewNode->AddReqWS(asReqLis[i]);
+
+							//make sure its a different world state (.compare == 0 means true)
+							if (asReqLis[i].compare(sSat))
+							{
+								//Add required world state from current node to child node
+								pNewNode->AddReqWS(asReqLis[i]);
+							}
+
 						}
 
+						//Setup A* scores
+
+
+
+						//G score is simply the cost of the action 
+						pNewNode->SetGScore(pAction->GetCost());
+
+						//The hueristic is simply the number of left over world states
+						pNewNode->SetHScore(pNewNode->GetReqWS().size());
+
+						//F score isn't needed to be setup, since its literally G + H. 
+
+						//Add node to the tree 
+						m_pTree->AddNode(pNewNode, pNode);
+
+						//Add it to the open list
+						m_pOpenList->Add(pNewNode);
 					}
-
-					//Setup A* scores
-
-					
-
-					//G score is simply the cost of the action 
-					pNewNode->SetGScore(pAction->GetCost());
-
-					//The hueristic is simply the number of left over world states
-					pNewNode->SetHScore(pNewNode->GetReqWS().size());
-
-					//F score isn't needed to be setup, since its literally G + H. 
-					
-					//Add node to the tree 
-					m_pTree->AddNode(pNewNode, pNode);
-
-					//Add it to the open list
-					m_pOpenList->Add(pNewNode);
 				}
 			}
 
@@ -242,7 +264,7 @@ bool Planner::GetPlan(Goal* pGoal, std::vector<Action*>& rapAvailableActions, st
 			if (rapPlan[i])
 			{
 				//get a reference to the expected effects of the action
-				const std::map<std::string, bool>& rEffects = rapPlan[i]->GetEffects();
+				const std::unordered_map<std::string, bool>& rEffects = rapPlan[i]->GetEffects();
 
 				//and append the effects of the action to expected world state
 				rExpectedWorldState.insert(rEffects.begin(), rEffects.end());
@@ -254,23 +276,23 @@ bool Planner::GetPlan(Goal* pGoal, std::vector<Action*>& rapAvailableActions, st
 	
 
 
-		//if they both have something in them
-		if (rapPlan.size() && rExpectedWorldState.size())
-		{
-			//then return true
-			return true;
-		}
-
-
-
-		//otherwise, one or both failed, so return false
-		return false;
+		
 
 
 	}
 
 
+	//if they both have something in them
+	if (rapPlan.size() && rExpectedWorldState.size())
+	{
+		//then return true
+		return true;
+	}
 
+
+
+	//otherwise, one or both failed, so return false
+	return false;
 
 	
 
