@@ -13,7 +13,7 @@ public:
 	//--------------------
 	//Constructor/Destructors
 	//--------------------
-	PlansOverseer(Manager* pManager);
+	PlansOverseer();
 	~PlansOverseer();
 
 	//--------------------
@@ -22,12 +22,14 @@ public:
 	void Update(float fDeltaTime);
 
 
+
+private:
+
 	//--------------------
 	//Constructor/Destructors
 	//--------------------
 	void HandleMessage(MessageBase* pMessage);
 
-private:
 	Planner* m_pPlanner;
 
 };

@@ -13,7 +13,7 @@ class MessageBase;
 class Messenger
 {
 public:
-	Messenger();
+	Messenger(Messenger* pNext);
 	virtual ~Messenger() = 0;
 
 	virtual void Update(float fDeltaTime) = 0;
