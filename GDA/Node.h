@@ -1,14 +1,15 @@
 #pragma once
 #include <vector>
 
-class Action;
-class Goal;
+class ActionBase;
+class GoalBase;
 
 class Node
 {
 public:
 
-	Node();
+
+	Node(ActionBase* pAction, Node* pParent, float fHScore ,GoalBase* pGoal = nullptr);
 
 	void SetParent(Node* pNode);
 
@@ -32,14 +33,14 @@ public:
 	void AddChild(Node* pNode);
 
 
-	Action* GetAction();
-	Goal* GetGoal();
+	ActionBase* GetAction();
+	GoalBase* GetGoal();
 
 
 	Node* GetParent();
 private:
-	Action* m_pAction;
-	Goal* m_pGoal;
+	ActionBase* m_pAction;
+	GoalBase* m_pGoal;
 	Node* m_pParent;
 	std::vector<Node*> m_apChildren;
 	std::vector<std::string> m_asReqWS;

@@ -22,6 +22,12 @@ public:
     void SetGoal(GoalBase* pGoal);
 
     void GetNewPlan();
+
+
+    std::vector<ActionBase*>& GetAvailableAction();
+    std::vector<ActionBase*>& GetCurrentPlan();
+
+    std::map<std::string, bool>& GetExpectedWS();
 private:
     GoalBase* m_pGoal;
     Director* m_pDirector;
@@ -34,8 +40,7 @@ private:
 
     //ew sorry
     //Caching whats needed to send a message to get a plan
-    Message<Quad<Manager*, std::vector<ActionBase*>&, std::vector<ActionBase*>&, std::map<std::string, bool>& >>* m_pPlanMessage;
-    Quad<Manager*, std::vector<ActionBase*>&, std::vector<ActionBase*>&, std::map<std::string, bool>& >* m_pPlanData;
+    Message<Manager*>* m_pPlanMessage;
 
     //A list of who any message is sent to
     std::vector<unsigned int> m_anMessageToID;

@@ -10,17 +10,17 @@ class Message : public MessageBase
 {
 public:
 	template<typename Data>
-	Message(Data* pData, std::vector<unsigned int> anToID, std::string sMessage) : MessageBase( anToID, sMessage)
+	Message(Data pData, std::vector<unsigned int> anToID, std::string sMessage) : MessageBase( anToID, sMessage)
 	{
 		m_pData = pData;
 	}
 
-	Data* GetData()
+	Data GetData()
 	{
 		return m_pData;
 	}
 protected:
-	Data* m_pData;
+	Data m_pData;
 };
 
 //--------------------------------------------------------

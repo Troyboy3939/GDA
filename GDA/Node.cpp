@@ -2,15 +2,25 @@
 #include "Action.h"
 
 
-Node::Node()
+
+Node::Node(ActionBase* pAction, Node* pParent, float fHScore, GoalBase* pGoal)
 {
-	m_pAction = nullptr;
-	m_pGoal = nullptr;
-	m_pParent = nullptr;
+	m_pAction = pAction;
+	m_pGoal = pGoal;
+	m_pParent = pParent;
 
-	m_fGScore = 0;
-	m_fHScore = 0;
 
+	if (m_pAction)
+	{
+		m_fGScore = m_pAction->GetCost();
+
+		m_fHScore = fHScore;
+	}
+	else
+	{
+		m_fGScore = 0;
+		m_fHScore = 0;
+	}
 }
 
 void Node::SetParent(Node* pNode)
@@ -70,12 +80,12 @@ void Node::AddChild(Node* pNode)
 	m_apChildren.push_back(pNode);
 }
 
-Action* Node::GetAction()
+ActionBase* Node::GetAction()
 {
 	return m_pAction;
 }
 
-Goal* Node::GetGoal()
+GoalBase* Node::GetGoal()
 {
 	return m_pGoal;
 }

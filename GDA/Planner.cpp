@@ -20,12 +20,16 @@ Planner::~Planner()
 	//----------------------------------------
 	// Creates a plan and expectations for lists passed in
 	//----------------------------------------
-bool Planner::GetPlan(Manager* pManager, std::vector<ActionBase*>& rapAvailableActions, std::vector<ActionBase*>& rapPlan, std::map<std::string, bool>& rExpectedWorldState)
+bool Planner::GetPlan(Manager* pManager)
 {
-
 	//-----------------------------------------------------------------------------------------
 	// Set up variables needed for A* / GOAP
 	//-----------------------------------------------------------------------------------------
+
+
+	std::vector<ActionBase*>& rapAvailableActions = pManager->GetAvailableAction();
+	std::vector<ActionBase*>& rapPlan = pManager->GetCurrentPlan();
+	std::map<std::string, bool>& rExpectedWorldState = pManager->GetExpectedWS();
 
 	//Get a pointer to the goal of the manager
 	GoalBase* pGoal = pManager->GetGoal();

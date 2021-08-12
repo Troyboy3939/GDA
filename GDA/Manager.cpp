@@ -20,13 +20,11 @@ Manager::Manager(Messenger* pNext, GoalBase* pDefaultGoal) : Messenger(pNext)
 		m_pDirector->PickGoal();
 	}
 
-	//sorry for this disgusting mess
-	// Basically create pointer to a Quad Class. This is a template class that takes any 4 types and stores them. This stores the necessary information to get a plan
-	m_pPlanData = new Quad<Manager*, std::vector<ActionBase*>&, std::vector<ActionBase*>&, std::map<std::string, bool>&>(this, m_apCurrentPlan,m_apAvailableActions,m_apExpectedWS);
+
 
 	//This creates a new message, that contains data of the above type. Then, pass in the data, along with who this message is for.
 	//Now this message can be reused instead of created everytime a new plan is needed
-	m_pPlanMessage = new Message<Quad<Manager*, std::vector<ActionBase*>&, std::vector<ActionBase*>&, std::map<std::string, bool>&>>(m_pPlanData, m_anMessageToID, "Get Plan");
+	m_pPlanMessage = new Message<Manager*>(this, m_anMessageToID, "Get Plan");
 
 
 	
@@ -36,6 +34,12 @@ Manager::Manager(Messenger* pNext, GoalBase* pDefaultGoal) : Messenger(pNext)
 
 void Manager::Update(float fDeltaTime)
 {
+
+	//check that your goal is still valid
+	if (!m_pGoal->IsValid(this))
+	{
+
+	}
 }
 
 GoalBase* Manager::GetGoal()
@@ -64,4 +68,19 @@ void Manager::GetNewPlan()
 
 	}
 
+}
+
+std::vector<ActionBase*>& Manager::GetAvailableAction()
+{
+	return m_apAvailableActions;
+}
+
+std::vector<ActionBase*>& Manager::GetCurrentPlan()
+{
+	return m_apCurrentPlan;
+}
+
+std::map<std::string, bool>& Manager::GetExpectedWS()
+{
+	return m_apExpectedWS;
 }
