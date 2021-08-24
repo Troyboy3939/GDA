@@ -1,20 +1,28 @@
 #pragma once
 #include "Messenger.h"
 #include <vector>
+#include <map>
+#include <string>
 
 
 class GoalBase;
 class ActionBase;
 class Director;
-
+class Observer;
 
 class Manager :
     public Messenger
 {
 public:
+    //-------------------
+    // Constructor / Destructor
+    //-------------------
     Manager(Messenger* pNext,GoalBase* pDefaultGoal = nullptr);
     virtual ~Manager() = 0;
 
+    //-------------------
+    // 
+    //-------------------
     virtual void Update(float fDeltaTime);
 
     GoalBase* GetGoal();
@@ -23,14 +31,18 @@ public:
 
     void GetNewPlan();
 
-
+    //-------------------
+    // Get lists
+    //-------------------
     std::vector<ActionBase*>& GetAvailableAction();
     std::vector<ActionBase*>& GetCurrentPlan();
-
     std::map<std::string, bool>& GetExpectedWS();
+    std::vector<GoalBase*>& GetAvailableGoals();
+    std::map<std::string, bool>& GetCurrentWS();
 private:
     GoalBase* m_pGoal;
     Director* m_pDirector;
+    Observer* m_pObserver;
 
     //Lists for getting a plan
     std::vector<ActionBase*> m_apAvailableActions;

@@ -5,7 +5,7 @@
 #include "Message.h"
 #include <utility>
 #include <map>
-
+#include "Observer.h"
 
 Manager::Manager(Messenger* pNext, GoalBase* pDefaultGoal) : Messenger(pNext)
 {
@@ -40,6 +40,14 @@ void Manager::Update(float fDeltaTime)
 	{
 
 	}
+	else //if it isn't
+	{
+		//Get a new goal
+		m_pDirector->PickGoal();
+
+		//then get a plan for said goal
+		GetNewPlan();
+	}
 }
 
 GoalBase* Manager::GetGoal()
@@ -50,6 +58,8 @@ GoalBase* Manager::GetGoal()
 void Manager::SetGoal(GoalBase* pGoal)
 {
 	m_pGoal = pGoal;
+
+	
 }
 
 void Manager::GetNewPlan()
@@ -83,4 +93,14 @@ std::vector<ActionBase*>& Manager::GetCurrentPlan()
 std::map<std::string, bool>& Manager::GetExpectedWS()
 {
 	return m_apExpectedWS;
+}
+
+std::vector<GoalBase*>& Manager::GetAvailableGoals()
+{
+	return m_apAvailableGoals;
+}
+
+std::map<std::string, bool>& Manager::GetCurrentWS()
+{
+	return m_pObserver->GetCurrentWorldState();
 }
