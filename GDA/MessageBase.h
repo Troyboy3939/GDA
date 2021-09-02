@@ -5,7 +5,7 @@
 class MessageBase
 {
 public:
-	MessageBase(std::vector<unsigned int> anToID, std::string sMessage);
+	MessageBase(std::vector<unsigned int>& anToID, std::string sMessage);
 	std::vector<unsigned int> GetRecieverID();
 
 	bool CheckID(unsigned int nID);
@@ -15,9 +15,11 @@ public:
 	bool CheckPassThrough(unsigned int nID);
 
 	std::string GetMessage();
+
+	void SetMessage(std::string sMessage);
 protected:
 	//who the message is for
-	std::vector<unsigned int> m_anToID;
+	std::vector<unsigned int>& m_anToID;
 
 	//who the message has been checked by
 	std::unordered_map<int, bool> m_aPassed;

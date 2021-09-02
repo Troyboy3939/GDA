@@ -1,11 +1,13 @@
 #include "Messenger.h"
 #include "MessageBase.h"
 
-Messenger::Messenger()
+Messenger::Messenger(Messenger* pNext)
 {
 	//Setup ID
 	m_nID = m_nNetworkSize;
 	m_nNetworkSize++;
+
+	m_pNext = pNext;
 }
 
 void Messenger::SendMessage(MessageBase* pMessage)

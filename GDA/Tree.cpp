@@ -3,7 +3,7 @@
 #include "Action.h"
 #include "Node.h"
 
-Tree::Tree(Goal* pGoal)
+Tree::Tree(GoalBase* pGoal)
 {
 
 	//Set the goal
@@ -35,21 +35,21 @@ void Tree::Clear()
 	Delete(m_pRootNode);
 }
 
-void Tree::SetGoal(Goal* pGoal)
+void Tree::SetGoal(GoalBase* pGoal)
 {
 	//make sure the tree is empty
 	Clear();
 
 	//Set the root node
-	//                      Action, Goal, isAct, Parent, Children
-	m_pRootNode = new Node{nullptr,pGoal,false,nullptr};
+	//                      Action, Parent, hSCore, Goal
+	m_pRootNode = new Node(nullptr, nullptr, 0, pGoal);
 
 
 
 
 }
 
-Tree::Node* Tree::GetGoal()
+Node* Tree::GetGoal()
 {
 	return m_pRootNode;
 }
@@ -58,7 +58,7 @@ void Tree::Delete(Node* pNode)
 {
 	if (pNode && m_pRootNode)
 	{
-		std::vector<Node*>& rChildren = pNode->m_apChildren;
+		std::vector<Node*>& rChildren = pNode->GetChildren();
 
 		//for every child
 		for (int i = 0; i < rChildren.size(); i++)

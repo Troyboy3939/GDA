@@ -2,15 +2,27 @@
 #include "Action.h"
 
 
-Node::Node()
+
+Node::Node(ActionBase* pAction, Node* pParent, float fHScore, GoalBase* pGoal)
 {
-	m_pAction = nullptr;
-	m_pGoal = nullptr;
-	m_pParent = nullptr;
+	m_pAction = pAction;
+	m_pGoal = pGoal;
+	m_pParent = pParent;
 
-	m_fGScore = 0;
-	m_fHScore = 0;
+	m_asReqWS = pAction->GetReqWS();
 
+
+	if (m_pAction)
+	{
+		m_fGScore = m_pAction->GetCost();
+
+		m_fHScore = fHScore;
+	}
+	else
+	{
+		m_fGScore = 0;
+		m_fHScore = 0;
+	}
 }
 
 void Node::SetParent(Node* pNode)
@@ -39,7 +51,7 @@ std::vector<Node*>& Node::GetChildren()
 	return m_apChildren;
 }
 
-std::vector<std::string> Node::GetReqWS()
+std::vector<std::string>& Node::GetReqWS()
 {
 	return m_asReqWS;
 }
@@ -53,6 +65,12 @@ void Node::SetReqWS(std::vector<std::string> asReqWS)
 void Node::AddReqWS(std::string sWS)
 {
 	m_asReqWS.push_back(sWS);
+}
+
+void Node::AddReqWS(std::vector<std::string>& asWS)
+{
+	m_asReqWS.insert(m_asReqWS.end(), asWS.begin(),asWS.end());
+
 }
 
 void Node::SetGScore(float fGscore)
@@ -70,12 +88,12 @@ void Node::AddChild(Node* pNode)
 	m_apChildren.push_back(pNode);
 }
 
-Action* Node::GetAction()
+ActionBase* Node::GetAction()
 {
 	return m_pAction;
 }
 
-Goal* Node::GetGoal()
+GoalBase* Node::GetGoal()
 {
 	return m_pGoal;
 }

@@ -1,0 +1,11 @@
+GDA Notes:
+
+- Replace line 32 on Director.cpp 
+
+- Switch from linked observers to Blackboard Architecture
+
+- Switch out std::map and std::unordered_map for custom versions
+
+- Switch out get world state from observer, to get world state from blackboard (observers update the blackboard)
+
+- Planner.cpp line 171. Replace line, could cause error

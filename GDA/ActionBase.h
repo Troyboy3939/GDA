@@ -51,6 +51,11 @@ public:
 
 
 protected:
+	ActionBase()
+	{
+
+	}
+
 
 	template<typename Data>
 	void Init(float fCost, std::function<bool(Manager* pManager, Data pData)>* pIsValidFuction)

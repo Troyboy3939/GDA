@@ -2,32 +2,20 @@
 #include <vector>
 
 
-class Action;
-class Goal;
+class ActionBase;
+class GoalBase;
 class Node;
 
 class Tree
 {
 public:
 	
-	struct Node1
-	{
-		//pointer to the goal/action
-		Action* m_pAction;
-		Goal* m_pGoal;
 
-		//parent node
-		Node1* m_pParent;
-		
-		float m_fGscore;
-		float m_fHscore;
-
-	};
 	
 	//----------------------------------------
 	//Constructor/Destructors
 	//----------------------------------------
-	Tree(Goal* pGoal);
+	Tree(GoalBase* pGoal);
 	Tree();
 
 	~Tree();
@@ -37,7 +25,7 @@ public:
 	//----------------------------------------
 	//Adds an action onto the tree structure, returns the node created
 	//----------------------------------------
-	Node* AddAction(Action* pAction, Node* pParent);
+	Node* AddAction(ActionBase* pAction, Node* pParent);
 
 	void AddNode(Node* pNode, Node* pParent);
 	//----------------------------------------
@@ -49,7 +37,7 @@ public:
 	//----------------------------------------
 	// Resets the goal of the tree
 	//----------------------------------------
-	void SetGoal(Goal* pGoal);
+	void SetGoal(GoalBase* pGoal);
 
 
 	//----------------------------------------

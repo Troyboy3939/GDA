@@ -1,10 +1,8 @@
 #include "MessageBase.h"
 
-MessageBase::MessageBase(std::vector<unsigned int> anToID, std::string sMessage)
+//constructor with initialiser list to assign the reference
+MessageBase::MessageBase(std::vector<unsigned int>& anToID, std::string sMessage) : m_anToID(anToID)
 {
-
-    //store who this message is going to
-    m_anToID = anToID;
 
     m_sMessage = sMessage;
 }
@@ -33,4 +31,9 @@ bool MessageBase::CheckPassThrough(unsigned int nID)
 std::string MessageBase::GetMessage()
 {
     return std::string();
+}
+
+void MessageBase::SetMessage(std::string sMessage)
+{
+    m_sMessage = sMessage;
 }
