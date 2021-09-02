@@ -1,5 +1,6 @@
 #pragma once
 #include "Messenger.h"
+#include "Message.h"
 #include <vector>
 #include <map>
 #include <string>
@@ -48,11 +49,14 @@ private:
     std::vector<ActionBase*> m_apAvailableActions;
     std::vector<ActionBase*> m_apCurrentPlan;
     std::vector<GoalBase*> m_apAvailableGoals;
+
+    //expected world state after plan is completed
     std::map<std::string, bool> m_apExpectedWS;
 
-    //ew sorry
+    
     //Caching whats needed to send a message to get a plan
     Message<Manager*>* m_pPlanMessage;
+    
 
     //A list of who any message is sent to
     std::vector<unsigned int> m_anMessageToID;

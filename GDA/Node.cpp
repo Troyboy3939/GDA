@@ -9,6 +9,8 @@ Node::Node(ActionBase* pAction, Node* pParent, float fHScore, GoalBase* pGoal)
 	m_pGoal = pGoal;
 	m_pParent = pParent;
 
+	m_asReqWS = pAction->GetReqWS();
+
 
 	if (m_pAction)
 	{
@@ -49,7 +51,7 @@ std::vector<Node*>& Node::GetChildren()
 	return m_apChildren;
 }
 
-std::vector<std::string> Node::GetReqWS()
+std::vector<std::string>& Node::GetReqWS()
 {
 	return m_asReqWS;
 }
@@ -63,6 +65,12 @@ void Node::SetReqWS(std::vector<std::string> asReqWS)
 void Node::AddReqWS(std::string sWS)
 {
 	m_asReqWS.push_back(sWS);
+}
+
+void Node::AddReqWS(std::vector<std::string>& asWS)
+{
+	m_asReqWS.insert(m_asReqWS.end(), asWS.begin(),asWS.end());
+
 }
 
 void Node::SetGScore(float fGscore)

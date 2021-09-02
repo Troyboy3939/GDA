@@ -25,43 +25,36 @@ void Director::PickGoal()
 	for (auto const& rWorldState : rCurrentWS)
 	{
 
-		
-		auto ws = Pair<std::string,bool>(rWorldState.first,rWorldState.second);
+		//convert std::pair to custom pair
+		auto ws = Pair<std::string, bool>(rWorldState.first, rWorldState.second);
 
 		//##################TODO REPLACE WITH OWN MAP THIS WILL BE AN ERROR WHEN NOTHING IS FOUND####################################
 		auto influence = m_Influences.at(ws);
 
 
 		//if statement here checking if influence is null
-		
 
 
-		//for every goal
+
+		//for every available goal
 		for (int i = 0; i < apAvailableGoals.size(); i++)
 		{
-			//if the goal is available
+			//Get a pointer to the goal that is influenced by the world state
 			GoalBase* pGoal = influence.m_Data1;
 
-
+			//if this goal is in fact 
 			if (pGoal == apAvailableGoals[i])
 			{
-
-				//if the goal doesn't exist, its created with a default of 0, so this is actually fine
+				//Add the amount of influence to the map
+				//if the goal isn't on the map, its created with a default of 0, so this is actually fine
 				aGoalInfluenceAmount[pGoal] += influence.m_Data2;
 			}
 		}
-		
+
 	}
-
-
-
 
 	//find the goal with the most influence
 	GoalBase* pGoal = std::max_element(aGoalInfluenceAmount.begin(),aGoalInfluenceAmount.end())._Ptr->_Myval.first;
-
-
-
-
 
 	//Set the goal
 	m_pManager->SetGoal(pGoal);

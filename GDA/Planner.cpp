@@ -83,24 +83,12 @@ bool Planner::GetPlan(Manager* pManager)
 			//Make sure the action is valid  (no point checking a route if the action cannot be undertaken)
 			if (pAction->IsValid(pManager))
 			{
-				Node* pNewNode = new Node();
-
-				//get a reference to the required world states
-				const std::vector<std::string>& rasReqWS = pAction->GetReqWS();
 
 
+				Node* pNewNode = new Node(pAction,pNode, pAction->GetReqWS().size());
 
-				//create a copy of the world states so that world states can be added to the node if needed (without affecting the action)
-				pNewNode->SetReqWS(rasReqWS);
-
-				//Setup A* scores
-
-
-				//G score is simply the cost of the action 
-				pNewNode->SetGScore(pAction->GetCost());
-
-				//THe hueristic is simply the number of left over world states
-				pNewNode->SetHScore(rasReqWS.size());
+				//get a reference to the required world 
+				std::vector<std::string>& rasParentReqWs = pNode->GetReqWS();
 
 				//Add node to the tree 
 				m_pTree->AddNode(pNewNode, pNode);
@@ -150,7 +138,7 @@ bool Planner::GetPlan(Manager* pManager)
 
 
 		//Get a reference to the required actions
-		const std::vector<std::string>& asReqLis = pNode->GetReqWS();
+		const std::vector<std::string>& rasParReqLis = pNode->GetReqWS();
 
 
 
@@ -166,13 +154,25 @@ bool Planner::GetPlan(Manager* pManager)
 			const std::string& sSat = pAction->GetSatWS();
 
 			//check every requirement of the node being looked at
-			for (int j = 0  ; j < asReqLis.size(); j++)
+			for (int j = 0  ; j < rasParReqLis.size(); j++)
 			{
 
-
-
 				//get one of the requirements
-				const std::string& sReq = asReqLis[i];
+				const std::string& sReq = rasParReqLis[i];
+
+				const std::map<std::string, bool>& rCurrentWS = pManager->GetCurrentWS();
+
+				//create a copy of the parents requirement list
+				std::vector<std::string> asParentReqList = rasParReqLis;
+
+				//if the requirement world state is already met, continue
+				if (rCurrentWS[sReq])
+				{
+					//#############Could be error if it doesn't exist, make sure to replace
+					std::remove(asParentReqList.begin(), asParentReqList.end(), sReq);
+					continue;
+				}
+
 
 				//if the action meets the requirement being looked at,
 				if (sSat.compare(sReq) == 0)
@@ -181,40 +181,24 @@ bool Planner::GetPlan(Manager* pManager)
 					//Make sure the action is valid (no point checking a route if the action cannot be undertaken)
 					if (pAction->IsValid(pManager))
 					{
-						Node* pNewNode = new Node();
 
-						//get a reference to the required world states of the soon to be child
-						const std::vector<std::string>& rasReqWS = pAction->GetReqWS();
+						
 
 
-
-						//create a copy of the world states so that world states can be added to the node if needed (without affecting the action)
-						pNewNode->SetReqWS(rasReqWS);
-
-						//for every requirement the current node has.
-						for (int k = 0; k < asReqLis.size(); k++)
+						//erase this requirement off the list of requirements
+						for (int k = 0 ; k < asParentReqList.size(); k++)
 						{
-
-							//make sure its a different world state (.compare == 0 means true)
-							if (asReqLis[i].compare(sSat))
+							if (asParentReqList[k].compare(sSat) == 0)
 							{
-								//Add required world state from current node to child node
-								pNewNode->AddReqWS(asReqLis[i]);
+								asParentReqList.erase(asParentReqList.begin() + k);
 							}
-
 						}
 
-						//Setup A* scores
+						//Create the node
+						Node* pNewNode = new Node(pAction,pNode, asParentReqList.size());
 
-
-
-						//G score is simply the cost of the action 
-						pNewNode->SetGScore(pAction->GetCost());
-
-						//The hueristic is simply the number of left over world states
-						pNewNode->SetHScore(pNewNode->GetReqWS().size());
-
-						//F score isn't needed to be setup, since its literally G + H. 
+						//Add the left over requirements to the child node
+						pNewNode->AddReqWS(asParentReqList);
 
 						//Add node to the tree 
 						m_pTree->AddNode(pNewNode, pNode);

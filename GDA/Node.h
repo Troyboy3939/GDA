@@ -20,12 +20,12 @@ public:
 	float GetHScore();
 
 	std::vector<Node*>& GetChildren();
-	std::vector<std::string> GetReqWS();
+	std::vector<std::string>& GetReqWS();
 
 	void SetReqWS(std::vector<std::string> asReqWS);
 
 	void AddReqWS(std::string sWS);
-	
+	void AddReqWS(std::vector<std::string>& asWS);
 
 	void SetGScore(float fGscore);
 	void SetHScore(float fHscore);
