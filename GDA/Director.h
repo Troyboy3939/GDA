@@ -4,7 +4,7 @@
 
 class Manager;
 
-class GoalBase;
+class Goal;
 
 class Director
 {
@@ -16,7 +16,7 @@ public:
 
 
 	
-	void AddInfluence(Pair<std::string, bool>& rWorldState, Pair<GoalBase*, float>& rInfluence);
+	void AddInfluence(Pair<std::string, bool>& rWorldState, Pair<Goal*, float>& rInfluence);
 
 private:
 
@@ -27,7 +27,7 @@ private:
 	// 	   GoalBase*: what the worldstate influences
 	// 	   float: how much influence is added to GoalBase*
 	//------------
-	std::unordered_map<Pair<std::string, bool>&, Pair<GoalBase*,float>& > m_Influences;
+	std::unordered_map<Pair<std::string, bool>&, Pair<Goal*,float>& > m_Influences;
 
 	//Parent
 	Manager* m_pManager;

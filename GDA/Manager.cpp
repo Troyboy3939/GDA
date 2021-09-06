@@ -6,11 +6,19 @@
 #include <utility>
 #include <map>
 #include "Observer.h"
+#include "Blackboard.h"
 
-Manager::Manager(Messenger* pNext, GoalBase* pDefaultGoal) : Messenger(pNext)
+
+Manager::Manager(Blackboard* pBlackboard, Goal* pDefaultGoal) : Messenger(pBlackboard)
 {
 	//Set up the director
 	m_pDirector = new Director(this);
+
+	//if it exists
+	if(m_pBlackboard)
+	{
+		m_pBlackboard->AddManager(this);
+	}
 
 	//Choose a goal to 
 	m_pGoal = pDefaultGoal;
@@ -19,17 +27,13 @@ Manager::Manager(Messenger* pNext, GoalBase* pDefaultGoal) : Messenger(pNext)
 	{
 		m_pDirector->PickGoal();
 	}
-
-
-
-	//This creates a new message, that contains data of the above type. Then, pass in the data, along with who this message is for.
-	//Now this message can be reused instead of created everytime a new plan is needed
-	m_pPlanMessage = new Message<Manager*>(this, m_anMessageToID, "Get Plan");
-
-
+	
 	
 
-	
+	m_pCurrentWS = new Message(m_anMessageToID,"Get World State", this, "Manager*");
+
+	//This creates a new message, meant for the plans overseer, passing in a pointer to this manager
+	m_pPlanMessage = new Message(m_anMessageToID,"Get Plan",this,"Manager*");	
 }
 
 void Manager::Update(float fDeltaTime)
@@ -50,12 +54,12 @@ void Manager::Update(float fDeltaTime)
 	}
 }
 
-GoalBase* Manager::GetGoal()
+Goal* Manager::GetGoal()
 {
 	return m_pGoal;
 }
 
-void Manager::SetGoal(GoalBase* pGoal)
+void Manager::SetGoal(Goal* pGoal)
 {
 	m_pGoal = pGoal;
 
@@ -64,28 +68,27 @@ void Manager::SetGoal(GoalBase* pGoal)
 
 void Manager::GetNewPlan()
 {
-	//If the next person in the messenger LL exists, and you have a goal
-	if (m_pNext && m_pGoal)
+	//If you have a goal and the blackboard exists
+	if (m_pBlackboard && m_pGoal)
 	{
-
 		//Set up the array about who this message is for
 		m_anMessageToID.clear();
 		m_anMessageToID.push_back(0);
 
 		//Send the message asking for a new plan
-		m_pNext->SendMessage(m_pPlanMessage);
+		m_pBlackboard->SendMessage(m_pPlanMessage);
 
 
 	}
 
 }
 
-std::vector<ActionBase*>& Manager::GetAvailableAction()
+std::vector<Action*>& Manager::GetAvailableAction()
 {
 	return m_apAvailableActions;
 }
 
-std::vector<ActionBase*>& Manager::GetCurrentPlan()
+std::vector<Action*>& Manager::GetCurrentPlan()
 {
 	return m_apCurrentPlan;
 }
@@ -95,12 +98,27 @@ std::map<std::string, bool>& Manager::GetExpectedWS()
 	return m_apExpectedWS;
 }
 
-std::vector<GoalBase*>& Manager::GetAvailableGoals()
+std::vector<Goal*>& Manager::GetAvailableGoals()
 {
 	return m_apAvailableGoals;
 }
 
 std::map<std::string, bool>& Manager::GetCurrentWS()
 {
-	return m_pObserver->GetCurrentWorldState();
+	//clear the list of ids
+	m_anMessageToID.clear();
+
+	//make sure this goes to the blackboard
+	m_anMessageToID.push_back(m_pBlackboard->GetID());
+
+	//Send message to blackboard, asking for the current world state
+	m_pBlackboard->SendMessage(m_pCurrentWS);
+
+	//return updated world state
+	return m_aCurrentWS;
+}
+
+std::map<std::string, bool>& Manager::GetCurrentWSList()
+{
+	return m_aCurrentWS;
 }

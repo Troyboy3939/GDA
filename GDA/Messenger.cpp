@@ -1,44 +1,37 @@
 #include "Messenger.h"
-#include "MessageBase.h"
+#include "Message.h"
 
-Messenger::Messenger(Messenger* pNext)
+Messenger::Messenger(Blackboard* pBlackboard)
 {
 	//Setup ID
 	m_nID = m_nNetworkSize;
 	m_nNetworkSize++;
 
-	m_pNext = pNext;
+	m_pBlackboard = pBlackboard;
+
 }
 
-void Messenger::SendMessage(MessageBase* pMessage)
+bool Messenger::SendMessage(Message* pMessage)
 {
 	//if the message and next person exist
-	if (pMessage && m_pNext)
-	{
-
-
-		//if you haven't already checked this message
-		if (pMessage->CheckPassThrough(m_nID))
+	if (pMessage)
+	{	
+		//if this message isn't meant for you
+		if (pMessage->CheckID(m_nID))
 		{
-			//if this message isn't meant for you
-			if (pMessage->CheckID(m_nID))
-			{
-				//Pass it through the network
-				m_pNext->SendMessage(pMessage);
-
-				return;
-			}
-
-			//otherwise, the message is intended for you, so
+			//message is meant for us
 			HandleMessage(pMessage);
+
+			return true;
 		}
 
 	}
+		return false;
 
 }
 
-void Messenger::SetNextMessenger(Messenger* pNext)
+unsigned int Messenger::GetID()
 {
-	m_pNext = pNext;
+	return m_nID;
 }
 

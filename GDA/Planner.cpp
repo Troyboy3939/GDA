@@ -27,12 +27,12 @@ bool Planner::GetPlan(Manager* pManager)
 	//-----------------------------------------------------------------------------------------
 
 
-	std::vector<ActionBase*>& rapAvailableActions = pManager->GetAvailableAction();
-	std::vector<ActionBase*>& rapPlan = pManager->GetCurrentPlan();
+	std::vector<Action*>& rapAvailableActions = pManager->GetAvailableAction();
+	std::vector<Action*>& rapPlan = pManager->GetCurrentPlan();
 	std::map<std::string, bool>& rExpectedWorldState = pManager->GetExpectedWS();
 
 	//Get a pointer to the goal of the manager
-	GoalBase* pGoal = pManager->GetGoal();
+	Goal* pGoal = pManager->GetGoal();
 
 
 
@@ -70,7 +70,7 @@ bool Planner::GetPlan(Manager* pManager)
 	for (int i = 0; i < rapAvailableActions.size(); i++)
 	{
 		//pointer to the action
-		ActionBase* pAction = rapAvailableActions[i];
+		Action* pAction = rapAvailableActions[i];
 
 		//find out what the satisfied world state is
 		const std::string& sSat = pAction->GetSatWS();
@@ -148,7 +148,7 @@ bool Planner::GetPlan(Manager* pManager)
 		for (int i = 0; i < rapAvailableActions.size(); i++)
 		{
 			//pointer to the action
-			ActionBase* pAction = rapAvailableActions[i];
+			Action* pAction = rapAvailableActions[i];
 
 			//find out what the satisfied world state is
 			const std::string& sSat = pAction->GetSatWS();
@@ -166,7 +166,7 @@ bool Planner::GetPlan(Manager* pManager)
 				std::vector<std::string> asParentReqList = rasParReqLis;
 
 				//if the requirement world state is already met, continue
-				if (rCurrentWS[sReq])
+				if (rCurrentWS[sReq]) //######## fix if this doesn't work
 				{
 					//#############Could be error if it doesn't exist, make sure to replace
 					std::remove(asParentReqList.begin(), asParentReqList.end(), sReq);

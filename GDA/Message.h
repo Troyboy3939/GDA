@@ -1,25 +1,64 @@
 #pragma once
+#include <unordered_map>
 #include <vector>
-#include "MessageBase.h"
-
-
-
-
-template<typename Data>
-class Message : public MessageBase
+#include <algorithm>
+class Message
 {
 public:
-	template<typename Data>
-	Message(Data pData, std::vector<unsigned int> anToID, std::string sMessage) : MessageBase( anToID, sMessage)
-	{
-		m_pData = pData;
-	}
+	//-----------------------------------
+	// Constructor for creating a new message
+	//-----------------------------------
+	Message(std::vector<unsigned int>& anToID, std::string sMessage, void* pData = nullptr, std::string sType = "");
 
-	Data GetData()
-	{
-		return m_pData;
-	}
+
+	//-----------------------------------
+	// Get the list of ID who this message is intended for
+	//-----------------------------------
+	std::vector<unsigned int> GetRecieverID();
+
+
+	//-----------------------------------
+	// Check if this message is intended for nID
+	//-----------------------------------
+	bool CheckID(unsigned int nID);
+
+
+
+	
+	//-----------------------------------
+	// Get the message string
+	//-----------------------------------
+	std::string GetMessage();
+
+
+	//-----------------------------------
+	// Change the message string
+	//-----------------------------------
+	void SetMessage(std::string sMessage);
+
+	//---------------------
+	// Get the data associated 
+	// with the message
+	//---------------------	
+	void* GetData();
+
+	//---------------------
+	// Return a string that 
+	// has the name of the 
+	// 	data type of m_pData
+	//---------------------	
+	std::string GetDataType();
 protected:
-	Data m_pData;
+	//who the message is for
+	std::vector<unsigned int>& m_anToID;
+
+	//who the message has been checked by
+	std::unordered_map<int, bool> m_aPassed;
+
+	std::string m_sMessage;
+
+	//Data and the data type 
+	std::string m_sDataType;
+	void* m_pData;
 };
 

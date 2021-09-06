@@ -7,32 +7,43 @@
 // this is the oberver design pattern
 //----------------------------------------
 
-class MessageBase;
-
+class Message;
+class Blackboard;
 
 class Messenger
 {
 public:
-	Messenger(Messenger* pNext);
+	//---------------------
+	// Constructors / Destructors
+	//---------------------	
+
+	Messenger(Blackboard* pBlackboard);
 	virtual ~Messenger() = 0;
 
+	//---------------------
+	// Called every frame
+	//---------------------
 	virtual void Update(float fDeltaTime) = 0;
 
-	//function that determines whether the message is intended for this messenger
-	virtual void SendMessage(MessageBase* pMessage);
+	//---------------------
+	// return true if message is being handled, is called when a message is being sent to this messenger
+	//---------------------
+	virtual bool SendMessage(Message* pMessage);
 
-
-	void SetNextMessenger(Messenger* pNext);
+	//---------------------
+	// Returns the ID of the messenger
+	//---------------------	
+	unsigned int GetID();
 
 protected:
 	//pure virtual function for handling messages
-	virtual void HandleMessage(MessageBase* pMessage) = 0;
+	virtual void HandleMessage(Message* pMessage) = 0;
 
 	//Id of this messenger
 	unsigned int m_nID;
 
-	//next person in messenger network
-	Messenger* m_pNext;
+	//pointer to the blackboard
+	Blackboard* m_pBlackboard;
 
 	//number of people in the network
 	static int m_nNetworkSize;

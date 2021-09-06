@@ -2,7 +2,7 @@
 #include "Planner.h"
 
 #include "Messenger.h"
-#include "MessageBase.h"
+#include "Message.h"
 
 class Manager;
 
@@ -28,7 +28,7 @@ private:
 	//--------------------
 	//Constructor/Destructors
 	//--------------------
-	void HandleMessage(MessageBase* pMessage);
+	void HandleMessage(Message* pMessage);
 
 	Planner* m_pPlanner;
 

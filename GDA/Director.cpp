@@ -3,7 +3,6 @@
 #include <string>
 #include "Manager.h"
 #include <algorithm>
-#include "Goal.h"
 Director::Director(Manager* pManager)
 {
 	m_pManager = pManager;
@@ -15,10 +14,10 @@ void Director::PickGoal()
 	std::map<std::string, bool>& rCurrentWS = m_pManager->GetCurrentWS();
 
 	//get a reference of the list of current goals
-	std::vector<GoalBase*> apAvailableGoals = m_pManager->GetAvailableGoals();
+	std::vector<Goal*> apAvailableGoals = m_pManager->GetAvailableGoals();
 
 	//Create a map that takes in a goal as a key and returns its value
-	std::map<GoalBase*, float> aGoalInfluenceAmount;
+	std::map<Goal*, float> aGoalInfluenceAmount;
 
 	
 	//for every world state in rCurrent World State
@@ -40,7 +39,7 @@ void Director::PickGoal()
 		for (int i = 0; i < apAvailableGoals.size(); i++)
 		{
 			//Get a pointer to the goal that is influenced by the world state
-			GoalBase* pGoal = influence.m_Data1;
+			Goal* pGoal = influence.m_Data1;
 
 			//if this goal is in fact 
 			if (pGoal == apAvailableGoals[i])
@@ -54,14 +53,14 @@ void Director::PickGoal()
 	}
 
 	//find the goal with the most influence
-	GoalBase* pGoal = std::max_element(aGoalInfluenceAmount.begin(),aGoalInfluenceAmount.end())._Ptr->_Myval.first;
+	Goal* pGoal = std::max_element(aGoalInfluenceAmount.begin(),aGoalInfluenceAmount.end())._Ptr->_Myval.first;
 
 	//Set the goal
 	m_pManager->SetGoal(pGoal);
 
 }
 
-void Director::AddInfluence(Pair<std::string, bool>& rWorldState, Pair<GoalBase*, float>& rInfluence)
+void Director::AddInfluence(Pair<std::string, bool>& rWorldState, Pair<Goal*, float>& rInfluence)
 {
 	m_Influences.insert_or_assign(rWorldState, rInfluence);
 }

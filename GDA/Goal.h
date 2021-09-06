@@ -1,59 +1,70 @@
 #pragma once
 #include <string>
 #include <functional>
-#include "GoalBase.h"
+
 class Manager;
 
-template<typename Data = bool>
-class Goal : public GoalBase
+class Goal
 {
 public:
-
 	//------------------------------------
-	// Empty Constructor. Has to be initialised 
-	// using Init()
+	// Constructors / Destuctors
 	//------------------------------------
-	Goal()
-	{
 
-	}
+	Goal(std::string sReqWS, std::function<bool(Manager* pManager)>* pIsValidFunction, void* pData = nullptr, std::string sType = "");
+
+	virtual ~Goal();
+
 	
+	
+	//------------------------------------
+	// Returns the world that needs to be true 
+	// for this goal to be complete
+	//------------------------------------
+	std::string GetRequiredWorldState();
+
 
 	//------------------------------------
-	// Destructor
+	// Calls the function pointer. Determines
+	// whether a goal can be completed 
+	// or not
 	//------------------------------------
-	~Goal()
-	{
-
-	}
+	virtual bool IsValid(Manager* pManager);
 
 	//------------------------------------
-	// Initialiser. NULL in case non-pointer value passed in
+	// Returns the data that was passed in
 	//------------------------------------
-	void Init(std::string sReqWS, std::function<bool(Manager* pManager, Data* pData)>* pIsValidFunction, Data data = NULL) 
-	{
+	void* GetData();
 
-		GoalBase::Init(sReqWS, pIsValidFunction);
+	//------------------------------------
+	// Returns the type of m_pData
+	//------------------------------------
+	std::string GetDataType();
 
-		m_Data = data;
-	}
+	//------------------------------------
+	// Changes m_pData to pData
+	//------------------------------------
+	void SetData(void* pData);
 
-	Data* GetData()
-	{
-		return m_Data;
-	}
+	//------------------------------------
+	// Updates the type of m_pData
+	//------------------------------------
+	void SetDataType(std::string sType);
 
-	void SetData(Data data)
-	{
-		m_Data = data;
-	}
 
-	bool IsValid(Manager* pManager)
-	{
-		return (*m_pIsValid)(pManager,m_Data);
-	}
+protected:
 
-private:
-	Data m_Data;
+	//Required world state of goal
+	std::string m_sReqWorldState;
+
+
+	//function pointer to check whether the action can be completed or not
+	std::function<bool(Manager* pManager)>* m_pIsValid;
+
+	//Data passed into goal
+	void* m_pData;
+
+	//type of m_pData
+	std::string m_sDataType;
 };
 

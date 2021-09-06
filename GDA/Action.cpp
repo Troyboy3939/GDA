@@ -1,19 +1,16 @@
 #include "Action.h"
+#include "Manager.h"
 
 
 
-Action::Action(float fCost,std::function<bool(Manager* pManager)>* pIsValidFuction)
+
+Action::Action(float fCost, std::function<bool(Manager* pManager)>* pIsValidFuction, void* pData, std::string sType)
 {
-    //initialise the cost of the action
     m_fCost = fCost;
-
-    //initialise the function to be called when calling IsValid()
     m_pIsValid = pIsValidFuction;
-}
 
-Action::Action(float fCost)
-{
-    m_fCost = fCost;
+    m_pData = pData;
+    m_sDataType = sType;
 }
 
 Action::~Action()
@@ -38,7 +35,7 @@ std::vector<std::string> Action::GetReqWS()
 void Action::AddEffect(std::string sWS, bool bValue)
 {
     //add the effect
-    m_Effects.insert_or_assign(sWS,bValue);
+    m_Effects.insert_or_assign(sWS, bValue);
 }
 
 std::unordered_map<std::string, bool> Action::GetEffects()
@@ -46,16 +43,36 @@ std::unordered_map<std::string, bool> Action::GetEffects()
     return m_Effects;
 
 
-    
+
 }
 
 bool Action::IsValid(Manager* pManager)
 {
-    return (*m_pIsValid)(pManager);
+    if (m_pIsValid)
+    {
+        return (*m_pIsValid)(pManager);
+    }
+
+    return false;
 }
 
-void Action::SetIsValidFunction(std::function<bool(Manager* pManager)>* pIsValidFunction)
+void* Action::GetData()
 {
-    m_pIsValid = pIsValidFunction;
+    return m_pData;
+}
+
+std::string Action::GetDataType()
+{
+    return m_sDataType;
+}
+
+void Action::SetData(void* pData)
+{
+    m_pData = pData;
+}
+
+void Action::SetDataType(std::string sType)
+{
+    m_sDataType = sType;
 }
 

@@ -3,7 +3,7 @@
 #include "Action.h"
 #include "Node.h"
 
-Tree::Tree(GoalBase* pGoal)
+Tree::Tree(Goal* pGoal)
 {
 
 	//Set the goal
@@ -35,7 +35,7 @@ void Tree::Clear()
 	Delete(m_pRootNode);
 }
 
-void Tree::SetGoal(GoalBase* pGoal)
+void Tree::SetGoal(Goal* pGoal)
 {
 	//make sure the tree is empty
 	Clear();

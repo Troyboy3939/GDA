@@ -2,8 +2,8 @@
 #include <vector>
 
 
-class ActionBase;
-class GoalBase;
+class Action;
+class Goal;
 class Node;
 
 class Tree
@@ -15,7 +15,7 @@ public:
 	//----------------------------------------
 	//Constructor/Destructors
 	//----------------------------------------
-	Tree(GoalBase* pGoal);
+	Tree(Goal* pGoal);
 	Tree();
 
 	~Tree();
@@ -25,7 +25,7 @@ public:
 	//----------------------------------------
 	//Adds an action onto the tree structure, returns the node created
 	//----------------------------------------
-	Node* AddAction(ActionBase* pAction, Node* pParent);
+	Node* AddAction(Action* pAction, Node* pParent);
 
 	void AddNode(Node* pNode, Node* pParent);
 	//----------------------------------------
@@ -37,7 +37,7 @@ public:
 	//----------------------------------------
 	// Resets the goal of the tree
 	//----------------------------------------
-	void SetGoal(GoalBase* pGoal);
+	void SetGoal(Goal* pGoal);
 
 
 	//----------------------------------------

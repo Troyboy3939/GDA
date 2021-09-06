@@ -141,14 +141,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Action.h" />
+    <ClInclude Include="Blackboard.h" />
+    <ClInclude Include="BlackboardData.h" />
     <ClInclude Include="Director.h" />
     <ClInclude Include="Goal.h" />
-    <ClInclude Include="GoalBase.h" />
     <ClInclude Include="GroupingStructures.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="Message.h" />
-    <ClInclude Include="MessageBase.h" />
     <ClInclude Include="Messenger.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Observer.h" />
@@ -158,12 +158,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Action.cpp" />
+    <ClCompile Include="Blackboard.cpp" />
+    <ClCompile Include="BlackboardData.cpp" />
     <ClCompile Include="Director.cpp" />
-    <ClCompile Include="GoalBase.cpp" />
+    <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Heap.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Message.cpp" />
-    <ClCompile Include="MessageBase.cpp" />
     <ClCompile Include="Messenger.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Observer.cpp" />

@@ -3,7 +3,7 @@
 
 
 
-Node::Node(ActionBase* pAction, Node* pParent, float fHScore, GoalBase* pGoal)
+Node::Node(Action* pAction, Node* pParent, float fHScore, Goal* pGoal)
 {
 	m_pAction = pAction;
 	m_pGoal = pGoal;
@@ -88,12 +88,12 @@ void Node::AddChild(Node* pNode)
 	m_apChildren.push_back(pNode);
 }
 
-ActionBase* Node::GetAction()
+Action* Node::GetAction()
 {
 	return m_pAction;
 }
 
-GoalBase* Node::GetGoal()
+Goal* Node::GetGoal()
 {
 	return m_pGoal;
 }

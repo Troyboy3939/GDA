@@ -18,28 +18,31 @@ void PlansOverseer::Update(float fDeltaTime)
 {
 }
 
-void PlansOverseer::HandleMessage(MessageBase* pMessage)
+void PlansOverseer::HandleMessage(Message* pMessage)
 {
 
 	//if the message is to get a plan
 	if (pMessage->GetMessage().compare("Get Plan") == 0)
 	{
-		//convert the Message to the appropriate type so that the information can be extracted
-		auto pMes = (Message<Manager*>*)pMessage;
-		
-		Manager* pData = pMes->GetData();
-
-		//extract the data from the message
-		Manager* pManager = pData;
-
-		//Get the plan, passing in the information
-		if (m_pPlanner->GetPlan(pManager))
+		//make sure that the data is a manager
+		if (pMessage->GetDataType().compare("Manager*") == 0)
 		{
-			//exit function, you are done here
-			return;
-		}
-		
+			//Get a pointer to the manager
+			Manager* pManager = (Manager*)pMessage->GetData();
 
+
+			//Get the plan, passing in the information
+			if (m_pPlanner->GetPlan(pManager))
+			{
+				//exit function, you are done here
+				return;
+			}
+
+
+		}
+	}
+	else //message is for something else
+	{
 
 	}
 	
