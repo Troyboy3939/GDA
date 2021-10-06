@@ -2,11 +2,18 @@
 #include "Manager.h"
 #include "Action.h"
 
+
+//-------------------------------------------------------------------------------------------------------------
+// Public Functions
+//-------------------------------------------------------------------------------------------------------------
+
 Observer::Observer(Manager* pManager)
 {
     m_pManager = pManager;
     m_aExpectedWorldState = pManager->GetExpectedWS();
 
+    m_bWSUpdated = false;
+    m_nCurrentAction = 0;
 
 }
 
@@ -17,24 +24,61 @@ WorldStateMap& Observer::GetCurrentWorldState()
 
 void Observer::Update(float fDeltaTime)
 {
-    DeviationChecker();
+    //if the world state has been updated 
+    if(m_bWSUpdated)
+    {
+        //Update the expected world state
+        FindExpectedWorldState();
+
+        //find out if there was a deviation
+        FindDeviations();
+
+        //if a deviation was found
+        if(!m_apDeviations.empty())
+        {
+            //Get an explanation for this happening
+            auto& rsExplanation = GenerateExplanation();
+
+        	//TODO: Send message to Plans Overseer asking for new goal
+
+        }
+
+
+        //no need to do this again until the world state has changed
+        m_bWSUpdated = false;
+    }
+
+
 
 }
 
-const Deviation Observer::DeviationChecker()
+//-------------------------------------------------------------------------------------------------------------
+// Protected Functions 
+//-------------------------------------------------------------------------------------------------------------
+
+std::string& Observer::GenerateExplanation()
 {
-    //This could be simplified, but then it wouldn't be an iterator
+    // TODO: insert return statement here
+}
+
+void Observer::FindDeviations()
+{
+    m_apDeviations.clear();
+
+    //This could be simplified, but then it wouldn't be an iterator -> needs to be iterator so it can return nothing if nothing is found
     //for every expected world state
-    for(auto rIt = m_aExpectedWorldState.begin(); rIt != m_aExpectedWorldState.end(); rIt++ )
+    for(auto rIt : m_aExpectedWorldState)
     {
-        //If this is a deviation
-        if(CheckDeviation(rIt->first))
+        //If this is a deviation -> current world state is different from the expected world state
+        if(CheckDeviation(rIt.first))
         {
-            return rIt;
+            m_apDeviations.push_back(rIt);
         }
     }
-    return m_aExpectedWorldState.end();
+ 
 }
+
+
 
 bool Observer::CheckDeviation(const std::string& rsWorldState)
 {
@@ -45,6 +89,7 @@ bool Observer::CheckDeviation(const std::string& rsWorldState)
     //if it exists in both
     if(rCurrIterator != m_aCurrentWorldState.end() && rExpeIterator != m_aExpectedWorldState.end())
     {
+        //return if they are the same value
         return rCurrIterator->second == rExpeIterator->second;
     }
 
@@ -61,70 +106,52 @@ void Observer::FindExpectedWorldState()
 
    const int nIndex = m_pManager->GetCurrentAction();
 
-    //----------------------------
-    // Firstly, add the requirements
-    // because they need to be true
-    // in order to do this
-    //----------------------------
+
 
     //if within bounds and the action exists
     if(nIndex < rapPlan.size() && rapPlan[nIndex])
     {
-    	const WorldStateList& rasReqWorldState = rapPlan[nIndex]->GetReqWS();
+        //reference to the required world state of the current action
+    	const WorldStateList& rasCurReqWS = rapPlan[nIndex]->GetReqWS();
 
-		for(int i = 0; i < rasReqWorldState.size();i++)
+        //add every requirement -> needs to be true or we cant do this action
+		for(int i = 0; i < rasCurReqWS.size();i++)
 		{
-            m_aExpectedWorldState.insert_or_assign(rasReqWorldState[i],true);
+            m_aExpectedWorldState.insert_or_assign(rasCurReqWS[i],true);
 		}
 
-        //----------------------------
-    	// Next, work all the way up
-    	// to the last action to find
-    	// any requirements that aren't
-    	// satisfied by actions (world
-    	// state was already true)
-    	//----------------------------
+        //make sure this has nothing on it
+        m_arsSatisfiedWS.clear();
+
+        //we need this done first
+        //add every actions satisfied ws onto this list
+        for(int i = 0; i < rapPlan.size(); i++)
+        {
+            m_arsSatisfiedWS.push_back(rapPlan[i]->GetSatWS());
+        }
 
         //for every action after the current action
         for(int i = nIndex + 1; i < rapPlan.size(); i++)
         {
-           
-                //reference to the list of world states
-                const WorldStateList& rasReq = rapPlan[i]->GetReqWS();
+            //get reference to the list of required WS
+            const WorldStateList& rasWS = rapPlan[i]->GetReqWS();
 
-                   //for every requirement of every action
-                   for (int j = 0; j < rasReq.size(); j++)
-                   {
-                       auto bSkip = false;
-						
-                       //Keep repeatitively going backwards
-                   	   //until you find an action that satisfies
-                   	   //the requirement. This should never
-                   	   //be too long, as a new plan will
-                       // probably get made anyway before nIndex reaches
-                   	   //anything high
-                       for(int k = nIndex - 1; k >= 0; k--)
-                       {
-                           //if the previous action satisfied this actions
-                       	   //requirement -> skip
-                           if (rasReq[j] == rapPlan[i - k]->GetSatWS())
-                           {
-                               bSkip = true;
-                               break;
-                           }
+            //for every requirement of every action after the current action
+            for(int j = 0; j < rasWS.size(); j++)
+            {
+                //find if it exists on the satisfied world state
+                auto pIterator = std::find(m_arsSatisfiedWS.begin(),m_arsSatisfiedWS.end(), rasWS[j]);
 
-							if(bSkip)
-							{
-                                break;
-							}
-                       }
-
-
-                       m_aExpectedWorldState.insert_or_assign(rasReq[j], true);
-                   }
-            
-	        
+                //if not on the list
+                if(pIterator == m_arsSatisfiedWS.end())
+                {
+                    //then this is expected to be true -> without we cant complete plan
+                    //and not satisfied by a world state
+                    m_aExpectedWorldState.insert_or_assign(rasWS[j], true);
+                }
+            }
         }
+
     }
 
 }
