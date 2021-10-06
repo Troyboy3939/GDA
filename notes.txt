@@ -1,7 +1,0 @@
-GDA Notes:
-
-- Replace line 32 on Director.cpp 
-
-- Switch out std::map, std::unordered_map, std::string and std::vector for custom versions
-
-- Planner.cpp line 171. Replace line, could cause error

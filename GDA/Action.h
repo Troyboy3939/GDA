@@ -7,12 +7,15 @@
 
 class Manager;
 
+using WorldStateList = std::vector<std::string>;
+
+
 class Action
 {
 public:
-	Action(float fCost, std::function<bool(Manager* pManager)>* pIsValidFuction, void* pData = nullptr, std::string sType = "");
+	Action(float fCost, std::function<bool(Manager* pManager)>* pIsValidFuction, std::string& rsType,void* pData = nullptr);
 
-	virtual ~Action();
+	virtual ~Action() = default;
 
 
 
@@ -24,26 +27,13 @@ public:
 	//------------------------------------
 	// Returns the world state that this action satisfies
 	//------------------------------------
-	std::string GetSatWS();
+	std::string& GetSatWS();
 
 
 	//------------------------------------
 	// Returns the WS that this action requires in order for it to be able to be done
 	//------------------------------------
-	std::vector<std::string> GetReqWS();
-
-
-	//------------------------------------
-	// Adds an effect of doing performing this action
-	//------------------------------------
-	void AddEffect(std::string sWS, bool bValue);
-
-
-	//------------------------------------
-	// Returns the list of how the action affects the worlds state
-	//------------------------------------
-	std::unordered_map<std::string, bool> GetEffects();
-
+	WorldStateList& GetReqWS();
 
 	//------------------------------------
 	// Calls the function pointer. Determines
@@ -60,7 +50,7 @@ public:
 	//------------------------------------
 	// returns the type of m_pData
 	//------------------------------------
-	std::string GetDataType();
+	std::string& GetDataType();
 
 	//------------------------------------
 	// Sets data
@@ -70,18 +60,15 @@ public:
 	//------------------------------------
 	// Updates the type of data
 	//------------------------------------
-	void SetDataType(std::string sType);
+	void SetDataType(std::string& rsType);
 protected:
 	
 
 	//list of world states that this action requires
-	std::vector<std::string> m_asReqWorldState;
+	WorldStateList m_asReqWorldState;
 
 	//world state that this action satisfies
 	std::string m_sSatWorldState;
-
-	//map that stores the effects that this action will have
-	std::unordered_map<std::string, bool> m_Effects;
 
 	//cost of performing this action
 	float m_fCost;

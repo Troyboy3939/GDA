@@ -9,11 +9,19 @@ class Manager;
 class PlansOverseer;
 
 
+
+
+
 class Blackboard :
     public Messenger
 {
 public:
+
+    template<typename T>
+    using StringMap = std::unordered_map<std::string, T>;
+
     Blackboard(PlansOverseer* pOverseer);
+    ~Blackboard();
 
     //----------------------
     // Update function, called every frame
@@ -31,8 +39,19 @@ public:
     //----------------------
     void AddManager(Manager* pManager);
 
+    //----------------------
+    // Returns any shared data with the key
+    //----------------------
+    BlackboardData* GetValue(std::string& sKey);
+
 
 private:
+
+    //----------------------
+    // turns rsKey into a substring from
+    // the first space in rsString
+    //----------------------
+    void GetSubString(const std::string& rsString, std::string& rsKey);
 
     //----------------------
     // This is called when this is sent a message that is intended for this blackboard
@@ -40,10 +59,10 @@ private:
     void HandleMessage(Message* pMessage);
 
     //What the managers think the current world state is
-    std::unordered_map<std::string, bool> m_aWorldState;
+    StringMap<bool> m_aWorldState;
 
     //Map keys to specific data that is given to by the managers
-    std::unordered_map<std::string, BlackboardData*> m_apData;
+	StringMap<BlackboardData*> m_apData;
 
     //List of managers that this blackboard with communicate with
     std::vector<Manager*> m_apManagers;

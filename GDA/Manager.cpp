@@ -12,7 +12,7 @@
 Manager::Manager(Blackboard* pBlackboard, Goal* pDefaultGoal) : Messenger(pBlackboard)
 {
 	//Set up the director
-	m_pDirector = new Director(this);
+	m_pDirector = new Director(this,0);
 
 	//if it exists
 	if(m_pBlackboard)
@@ -83,6 +83,11 @@ void Manager::GetNewPlan()
 
 }
 
+unsigned int Manager::GetCurrentAction()
+{
+	return m_nCurrentAction;
+}
+
 std::vector<Action*>& Manager::GetAvailableAction()
 {
 	return m_apAvailableActions;
@@ -93,9 +98,9 @@ std::vector<Action*>& Manager::GetCurrentPlan()
 	return m_apCurrentPlan;
 }
 
-std::map<std::string, bool>& Manager::GetExpectedWS()
+std::unordered_map<std::string, bool>& Manager::GetExpectedWS()
 {
-	return m_apExpectedWS;
+	return m_aExpectedWS;
 }
 
 std::vector<Goal*>& Manager::GetAvailableGoals()
@@ -103,7 +108,7 @@ std::vector<Goal*>& Manager::GetAvailableGoals()
 	return m_apAvailableGoals;
 }
 
-std::map<std::string, bool>& Manager::GetCurrentWS()
+std::unordered_map<std::string, bool>& Manager::GetCurrentWS()
 {
 	//clear the list of ids
 	m_anMessageToID.clear();
@@ -118,7 +123,7 @@ std::map<std::string, bool>& Manager::GetCurrentWS()
 	return m_aCurrentWS;
 }
 
-std::map<std::string, bool>& Manager::GetCurrentWSList()
+std::unordered_map<std::string, bool>& Manager::GetCurrentWSList()
 {
 	return m_aCurrentWS;
 }

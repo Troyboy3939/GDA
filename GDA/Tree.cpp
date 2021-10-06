@@ -17,6 +17,7 @@ Tree::Tree()
 
 Tree::~Tree()
 {
+	Delete(m_pRootNode);
 }
 
 

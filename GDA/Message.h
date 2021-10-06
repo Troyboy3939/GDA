@@ -14,7 +14,7 @@ public:
 	//-----------------------------------
 	// Get the list of ID who this message is intended for
 	//-----------------------------------
-	std::vector<unsigned int> GetRecieverID();
+	std::vector<unsigned int>& GetRecieverID();
 
 
 	//-----------------------------------
@@ -28,7 +28,7 @@ public:
 	//-----------------------------------
 	// Get the message string
 	//-----------------------------------
-	std::string GetMessage();
+	std::string& GetMessage();
 
 
 	//-----------------------------------
@@ -47,10 +47,10 @@ public:
 	// has the name of the 
 	// 	data type of m_pData
 	//---------------------	
-	std::string GetDataType();
+	std::string& GetDataType();
 protected:
 	//who the message is for
-	std::vector<unsigned int>& m_anToID;
+	std::vector<unsigned int> m_anToID;
 
 	//who the message has been checked by
 	std::unordered_map<int, bool> m_aPassed;

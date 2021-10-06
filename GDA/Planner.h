@@ -7,7 +7,7 @@
 class Tree;
 class Heap;
 
-
+class Node;
 //----------------------------------------
 //The planner class is an object that the plansoverseer will use to 
 // make get any plans it might need.

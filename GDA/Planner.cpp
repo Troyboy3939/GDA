@@ -26,13 +26,17 @@ bool Planner::GetPlan(Manager* pManager)
 	// Set up variables needed for A* / GOAP
 	//-----------------------------------------------------------------------------------------
 
+	//list of available actions
+	auto& rapAvailableActions = pManager->GetAvailableAction();
 
-	std::vector<Action*>& rapAvailableActions = pManager->GetAvailableAction();
-	std::vector<Action*>& rapPlan = pManager->GetCurrentPlan();
-	std::map<std::string, bool>& rExpectedWorldState = pManager->GetExpectedWS();
+	//reference to the current plan
+	auto& rapPlan = pManager->GetCurrentPlan();
+
+	//reference to the expected world state
+	auto& rExpectedWorldState = pManager->GetExpectedWS();
 
 	//Get a pointer to the goal of the manager
-	Goal* pGoal = pManager->GetGoal();
+	auto pGoal = pManager->GetGoal();
 
 
 
@@ -41,7 +45,7 @@ bool Planner::GetPlan(Manager* pManager)
 	m_pTree->SetGoal(pGoal);
 
 	//boolean to exit the while loop
-	bool bPlanFound = false;
+	auto bPlanFound = false;
 
 	//prepare data structures (member variables so that they aren't created for every new plan, its quicker to clear them)
 	m_pOpenList->Clear();
@@ -53,12 +57,12 @@ bool Planner::GetPlan(Manager* pManager)
 
 
 	//pointer to the goal node
-	Node* pNode = m_pTree->GetGoal();
+	auto pNode = m_pTree->GetGoal();
 
 	
 
 	//the requirement for the goal to be completed
-	const std::string& sReq =  pGoal->GetRequiredWorldState();
+	const auto& sReq =  pGoal->GetRequiredWorldState();
 
 
 	//-----------------------------------------------------------------------------------------
@@ -70,25 +74,22 @@ bool Planner::GetPlan(Manager* pManager)
 	for (int i = 0; i < rapAvailableActions.size(); i++)
 	{
 		//pointer to the action
-		Action* pAction = rapAvailableActions[i];
+		auto pAction = rapAvailableActions[i];
 
 		//find out what the satisfied world state is
-		const std::string& sSat = pAction->GetSatWS();
+		const auto& sSat = pAction->GetSatWS();
 
 
 
 		//if the required world state of the goal is met by the action, then
-		if (sReq.compare(sSat) == 0)
+		if (sReq == sSat)
 		{
 			//Make sure the action is valid  (no point checking a route if the action cannot be undertaken)
 			if (pAction->IsValid(pManager))
 			{
 
 
-				Node* pNewNode = new Node(pAction,pNode, pAction->GetReqWS().size());
-
-				//get a reference to the required world 
-				std::vector<std::string>& rasParentReqWs = pNode->GetReqWS();
+				auto pNewNode = new Node(pAction,pNode, pAction->GetReqWS().size());
 
 				//Add node to the tree 
 				m_pTree->AddNode(pNewNode, pNode);
@@ -137,8 +138,8 @@ bool Planner::GetPlan(Manager* pManager)
 
 
 
-		//Get a reference to the required actions
-		const std::vector<std::string>& rasParReqLis = pNode->GetReqWS();
+		//Get a reference to the array of world states required by its parent
+		auto& rasParentRequirements = pNode->GetReqWS();
 
 
 
@@ -148,70 +149,88 @@ bool Planner::GetPlan(Manager* pManager)
 		for (int i = 0; i < rapAvailableActions.size(); i++)
 		{
 			//pointer to the action
-			Action* pAction = rapAvailableActions[i];
+			auto pAction = rapAvailableActions[i];
+
+			//Make sure the action is valid (no point checking a route if the action cannot be undertaken)
+			if (!pAction->IsValid(pManager))
+			{
+				continue;
+			}
+
+
 
 			//find out what the satisfied world state is
-			const std::string& sSat = pAction->GetSatWS();
+			const auto& sSat = pAction->GetSatWS();
 
+			
 			//check every requirement of the node being looked at
-			for (int j = 0  ; j < rasParReqLis.size(); j++)
+			for (int j = 0  ; j < rasParentRequirements.size(); j++)
 			{
-
-				//get one of the requirements
-				const std::string& sReq = rasParReqLis[i];
-
-				const std::map<std::string, bool>& rCurrentWS = pManager->GetCurrentWS();
+				//-----------------------------------
+				// Set up appropriate variables
+				//-----------------------------------
 
 				//create a copy of the parents requirement list
-				std::vector<std::string> asParentReqList = rasParReqLis;
+				auto asParentReqList = rasParentRequirements;
 
-				//if the requirement world state is already met, continue
-				if (rCurrentWS[sReq]) //######## fix if this doesn't work
+
+				//get one of the requirements
+				auto& sReq = rasParentRequirements[i];
+
+				//Get a reference to the current world state
+				auto& rCurrentWS = pManager->GetCurrentWS();
+
+				
+
+
+				//-----------------------------------
+				// Check if the requirement is already met
+				//-----------------------------------
+
+				//see if the parents requirement is already met
+				auto iter = rCurrentWS.find(sReq);
+
+				//if the world state requirement of parent exists, then we need to check if its true
+				if (iter != rCurrentWS.end())
 				{
-					//#############Could be error if it doesn't exist, make sure to replace
-					std::remove(asParentReqList.begin(), asParentReqList.end(), sReq);
-					continue;
+					//if the world state is true, then there
+					if (iter->second)
+					{
+						//if the required world state is already met, continue
+						std::remove(asParentReqList.begin(), asParentReqList.end(), iter->first);
+						continue;
+					}
 				}
+
 
 
 				//if the action meets the requirement being looked at,
-				if (sSat.compare(sReq) == 0)
+				if (sSat == sReq)
 				{
-
-					//Make sure the action is valid (no point checking a route if the action cannot be undertaken)
-					if (pAction->IsValid(pManager))
+					//erase this requirement off the list of requirements
+					for (int k = 0 ; k < asParentReqList.size(); k++)
 					{
-
-						
-
-
-						//erase this requirement off the list of requirements
-						for (int k = 0 ; k < asParentReqList.size(); k++)
+						if (asParentReqList[k] == sSat)
 						{
-							if (asParentReqList[k].compare(sSat) == 0)
-							{
-								asParentReqList.erase(asParentReqList.begin() + k);
-							}
+							asParentReqList.erase(asParentReqList.begin() + k);
 						}
-
-						//Create the node
-						Node* pNewNode = new Node(pAction,pNode, asParentReqList.size());
-
-						//Add the left over requirements to the child node
-						pNewNode->AddReqWS(asParentReqList);
-
-						//Add node to the tree 
-						m_pTree->AddNode(pNewNode, pNode);
-
-						//Add it to the open list
-						m_pOpenList->Add(pNewNode);
 					}
+
+					//Create the node
+					auto pNewNode = new Node(pAction,pNode, asParentReqList.size());
+
+					//Add the left over requirements to the child node
+					pNewNode->AddReqWS(asParentReqList);
+
+					//Add node to the tree 
+					m_pTree->AddNode(pNewNode, pNode);
+
+					//Add it to the open list
+					m_pOpenList->Add(pNewNode);
+					
 				}
 			}
-
 		}
-
-
 	}
 
 
@@ -225,7 +244,7 @@ bool Planner::GetPlan(Manager* pManager)
 	if (bPlanFound)
 	{
 		//pointer to the goal node
-		Node* pGoal = m_pTree->GetGoal();
+		auto pGoal = m_pTree->GetGoal();
 
 	
 
@@ -241,23 +260,6 @@ bool Planner::GetPlan(Manager* pManager)
 
 		}
 
-
-		//-----------------------------------------------------------------------------------------
-		// Get the expected world state after the goal has been completed
-		//-----------------------------------------------------------------------------------------
-
-		//for every action in the plan
-		for (int i = 0; rapPlan.size(); i++)
-		{
-			if (rapPlan[i])
-			{
-				//get a reference to the expected effects of the action
-				const std::unordered_map<std::string, bool>& rEffects = rapPlan[i]->GetEffects();
-
-				//and append the effects of the action to expected world state
-				rExpectedWorldState.insert(rEffects.begin(), rEffects.end());
-			}
-		}
 
 
 	

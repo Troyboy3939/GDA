@@ -3,15 +3,15 @@
 
 
 
-Goal::Goal(std::string sReqWS, std::function<bool(Manager* pManager)>* pIsValidFunction, void* pData, std::string sType)
+Goal::Goal(std::string& rsReqWS, std::function<bool(Manager* pManager)>* pIsValidFunction, std::string& rsType, void* pData)
 {
 
-	m_sReqWorldState = sReqWS;
+	m_sReqWorldState = rsReqWS;
 
 	m_pIsValid = pIsValidFunction;
 
 	m_pData = pData;
-	m_sDataType = sType;
+	m_sDataType = rsType;
 }
 
 Goal::~Goal()
@@ -19,7 +19,7 @@ Goal::~Goal()
 }
 
 
-std::string Goal::GetRequiredWorldState()
+std::string& Goal::GetRequiredWorldState()
 {
 	return m_sReqWorldState;
 }
@@ -34,7 +34,7 @@ void* Goal::GetData()
 	return m_pData;
 }
 
-std::string Goal::GetDataType()
+std::string& Goal::GetDataType()
 {
 	return m_sDataType;
 }
@@ -44,7 +44,7 @@ void Goal::SetData(void* pData)
 	m_pData = pData;
 }
 
-void Goal::SetDataType(std::string sType)
+void Goal::SetDataType(std::string& sType)
 {
 	m_sDataType = sType;
 }

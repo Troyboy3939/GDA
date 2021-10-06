@@ -11,7 +11,7 @@ public:
 	// Constructors / Destuctors
 	//------------------------------------
 
-	Goal(std::string sReqWS, std::function<bool(Manager* pManager)>* pIsValidFunction, void* pData = nullptr, std::string sType = "");
+	Goal(std::string& rsReqWS, std::function<bool(Manager* pManager)>* pIsValidFunction, std::string& rsType ,void* pData = nullptr);
 
 	virtual ~Goal();
 
@@ -21,7 +21,7 @@ public:
 	// Returns the world that needs to be true 
 	// for this goal to be complete
 	//------------------------------------
-	std::string GetRequiredWorldState();
+	std::string& GetRequiredWorldState();
 
 
 	//------------------------------------
@@ -39,7 +39,7 @@ public:
 	//------------------------------------
 	// Returns the type of m_pData
 	//------------------------------------
-	std::string GetDataType();
+	std::string& GetDataType();
 
 	//------------------------------------
 	// Changes m_pData to pData
@@ -49,7 +49,7 @@ public:
 	//------------------------------------
 	// Updates the type of m_pData
 	//------------------------------------
-	void SetDataType(std::string sType);
+	void SetDataType(std::string& sType);
 
 
 protected:

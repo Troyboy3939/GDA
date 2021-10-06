@@ -4,17 +4,13 @@
 
 
 
-Action::Action(float fCost, std::function<bool(Manager* pManager)>* pIsValidFuction, void* pData, std::string sType)
+Action::Action(float fCost, std::function<bool(Manager* pManager)>* pIsValidFuction, std::string& rsType, void* pData)
 {
     m_fCost = fCost;
     m_pIsValid = pIsValidFuction;
 
     m_pData = pData;
-    m_sDataType = sType;
-}
-
-Action::~Action()
-{
+    m_sDataType = rsType;
 }
 
 float Action::GetCost()
@@ -22,29 +18,19 @@ float Action::GetCost()
     return m_fCost;
 }
 
-std::string Action::GetSatWS()
+std::string& Action::GetSatWS()
 {
     return m_sSatWorldState;
 }
 
-std::vector<std::string> Action::GetReqWS()
+WorldStateList& Action::GetReqWS()
 {
     return m_asReqWorldState;
 }
 
-void Action::AddEffect(std::string sWS, bool bValue)
-{
-    //add the effect
-    m_Effects.insert_or_assign(sWS, bValue);
-}
-
-std::unordered_map<std::string, bool> Action::GetEffects()
-{
-    return m_Effects;
 
 
 
-}
 
 bool Action::IsValid(Manager* pManager)
 {
@@ -61,7 +47,7 @@ void* Action::GetData()
     return m_pData;
 }
 
-std::string Action::GetDataType()
+std::string& Action::GetDataType()
 {
     return m_sDataType;
 }
@@ -71,8 +57,8 @@ void Action::SetData(void* pData)
     m_pData = pData;
 }
 
-void Action::SetDataType(std::string sType)
+void Action::SetDataType(std::string& rsType)
 {
-    m_sDataType = sType;
+    m_sDataType = rsType;
 }
 

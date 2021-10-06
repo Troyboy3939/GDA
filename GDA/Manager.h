@@ -11,10 +11,18 @@ class Action;
 class Director;
 class Observer;
 
+//Alias Declaration. Far easier to read
+using WorldStateMap = std::unordered_map<std::string, bool>;
+
+using ActionList = std::vector<Action*>;
+using GoalList = std::vector<Goal*>;
+
+
 class Manager :
     public Messenger
 {
 public:
+   
     //-------------------
     // Constructor / Destructor
     //-------------------
@@ -42,15 +50,20 @@ public:
     void GetNewPlan();
 
     //-------------------
+    // Returns index of action being performed
+    //-------------------
+    unsigned int GetCurrentAction();
+
+    //-------------------
     // Get lists
     //-------------------
-    std::vector<Action*>& GetAvailableAction();
-    std::vector<Action*>& GetCurrentPlan();
-    std::map<std::string, bool>& GetExpectedWS();
-    std::vector<Goal*>& GetAvailableGoals();
-    std::map<std::string, bool>& GetCurrentWS();
+    ActionList& GetAvailableAction();
+    ActionList& GetCurrentPlan();
+    WorldStateMap& GetExpectedWS();
+    GoalList& GetAvailableGoals();
+    WorldStateMap& GetCurrentWS();
 
-    std::map<std::string, bool>& GetCurrentWSList();
+    WorldStateMap& GetCurrentWSList();
    
 private:
     Goal* m_pGoal;
@@ -58,16 +71,17 @@ private:
     Observer* m_pObserver;
 
     //Lists for getting a plan
-    std::vector<Action*> m_apAvailableActions;
-    std::vector<Action*> m_apCurrentPlan;
-    std::vector<Goal*> m_apAvailableGoals;
-    
+    ActionList m_apAvailableActions;
+    ActionList m_apCurrentPlan;
+    GoalList m_apAvailableGoals;
+
+    unsigned int m_nCurrentAction;
 
 
     //expected world state after plan is completed
-    std::map<std::string, bool> m_apExpectedWS;
+    WorldStateMap m_aExpectedWS;
 
-    std::map<std::string, bool> m_aCurrentWS;
+    WorldStateMap m_aCurrentWS;
     
     //Caching whats needed to send a message to get a plan
     Message* m_pPlanMessage;

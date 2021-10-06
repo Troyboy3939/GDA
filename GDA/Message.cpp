@@ -7,7 +7,7 @@ Message::Message(std::vector<unsigned int>& anToID, std::string sMessage, void* 
     m_sDataType = sType;
     m_sMessage = sMessage;
 }
-std::vector<unsigned int> Message::GetRecieverID()
+std::vector<unsigned int>& Message::GetRecieverID()
 {
     return m_anToID;
 }
@@ -17,9 +17,9 @@ bool Message::CheckID(unsigned int nID)
     return std::find(m_anToID.begin(),m_anToID.end(), nID) != m_anToID.end();
 }
 
-std::string Message::GetMessage()
+std::string& Message::GetMessage()
 {
-    return std::string();
+    return m_sMessage;
 }
 
 void Message::SetMessage(std::string sMessage)
@@ -32,7 +32,7 @@ void* Message::GetData()
     return m_pData;
 }
 
-std::string Message::GetDataType()
+std::string& Message::GetDataType()
 {
     return m_sDataType;
 }
