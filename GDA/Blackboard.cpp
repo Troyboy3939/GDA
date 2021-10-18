@@ -115,6 +115,11 @@ void Blackboard::HandleMessage(Message* pMessage)
 				m_aWorldState.insert_or_assign(sWorldState,static_cast<bool>(pMessage->GetData()));
 			}
 		}
+		else if(rsMessage == "DeviationsFound")
+		{
+			//hand this off to the plans overseer
+			m_pPlansOverseer->SendMessage(pMessage);
+		}
 	}
 }
 

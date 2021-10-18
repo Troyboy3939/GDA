@@ -2,8 +2,28 @@
 #include <string>
 #include <functional>
 
+
+class Expectation;
 class Manager;
 
+
+//Alias Declarations
+using ExpecInitList = std::initializer_list<Expectation*>;
+using Expectations = std::vector<Expectation*>;
+
+//------------------------------------------------------
+// Goal: A thing that a manager should try to work towards
+//
+// Must have a required world state -> For planner to work
+// Must have an IsValid Function -> How would you know if you can do this if it didn't?
+//
+// Must have a list of expectations -> things it is assuming are true ->
+// necessary for responding to unexpected events
+//
+// Can have any data passed into it by using pData. This could be used for
+// saying specifically which thing to attack, or which thing to build
+//
+//------------------------------------------------------
 class Goal
 {
 public:
@@ -11,7 +31,15 @@ public:
 	// Constructors / Destuctors
 	//------------------------------------
 
-	Goal(std::string& rsReqWS, std::function<bool(Manager* pManager)>* pIsValidFunction, std::string& rsType ,void* pData = nullptr);
+
+	//------------------------------------
+	// rsReqWs = Required World State -> Must be true if this goal is completed
+	// pIsValidFunction -> This will be called when the planner needs to check if this goal is valid (can be done)
+	// expec = ExpecInitList. Use Initialiser list such as -> {"EnemyWeaker", "EnemyHasNoPikemen"}
+	// pData -> Any data that is necessary for this goal to function properly
+	// rsType -> The type of pData
+	//------------------------------------
+	Goal(std::string& rsReqWS, std::function<bool(Manager* pMan)>& IsValidFunction, ExpecInitList expec,const std::string& rsType = "", void* pData = nullptr);
 
 	virtual ~Goal();
 
@@ -52,14 +80,21 @@ public:
 	void SetDataType(std::string& sType);
 
 
+	//------------------------------------
+	// Returns reference to list of expectations
+	//------------------------------------
+	Expectations& GetExpectations();
+
 protected:
+
+	Expectations m_asExpectations;
 
 	//Required world state of goal
 	std::string m_sReqWorldState;
 
 
 	//function pointer to check whether the action can be completed or not
-	std::function<bool(Manager* pManager)>* m_pIsValid;
+	std::function<bool(Manager* pManager)> m_fnIsValid;
 
 	//Data passed into goal
 	void* m_pData;

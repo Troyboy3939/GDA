@@ -5,17 +5,20 @@
 #include <map>
 #include <string>
 
+#include "Goal.h"
 
-class Goal;
 class Action;
 class Director;
 class Observer;
 
 //Alias Declaration. Far easier to read
 using WorldStateMap = std::unordered_map<std::string, bool>;
+using WorldStateList = std::vector<std::string>;
+
 
 using ActionList = std::vector<Action*>;
 using GoalList = std::vector<Goal*>;
+
 
 
 class Manager :
@@ -54,19 +57,26 @@ public:
     //-------------------
     unsigned int GetCurrentAction();
 
+
+    void MessageBlackboard(Message* pMessage);
+
     //-------------------
     // Get lists
     //-------------------
-    ActionList& GetAvailableAction();
+    ActionList& GetAvailableActions();
     ActionList& GetCurrentPlan();
-    WorldStateMap& GetExpectedWS();
     GoalList& GetAvailableGoals();
     WorldStateMap& GetCurrentWS();
 
     WorldStateMap& GetCurrentWSList();
    
+    Expectations& GetExpectations();
 private:
+    //Current goal of this manager
     Goal* m_pGoal;
+
+
+    //Components of Manager
     Director* m_pDirector;
     Observer* m_pObserver;
 
@@ -75,11 +85,8 @@ private:
     ActionList m_apCurrentPlan;
     GoalList m_apAvailableGoals;
 
+    //the action this manager is currently performing
     unsigned int m_nCurrentAction;
-
-
-    //expected world state after plan is completed
-    WorldStateMap m_aExpectedWS;
 
     WorldStateMap m_aCurrentWS;
     

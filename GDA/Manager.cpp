@@ -88,19 +88,25 @@ unsigned int Manager::GetCurrentAction()
 	return m_nCurrentAction;
 }
 
-std::vector<Action*>& Manager::GetAvailableAction()
+void Manager::MessageBlackboard(Message* pMessage)
+{
+	m_pBlackboard->SendMessage(pMessage);
+
+}
+
+ActionList& Manager::GetAvailableActions()
 {
 	return m_apAvailableActions;
 }
 
-std::vector<Action*>& Manager::GetCurrentPlan()
+ActionList& Manager::GetCurrentPlan()
 {
 	return m_apCurrentPlan;
 }
 
-std::unordered_map<std::string, bool>& Manager::GetExpectedWS()
+Expectations& Manager::GetExpectations()
 {
-	return m_aExpectedWS;
+	return m_pGoal->GetExpectations();
 }
 
 std::vector<Goal*>& Manager::GetAvailableGoals()

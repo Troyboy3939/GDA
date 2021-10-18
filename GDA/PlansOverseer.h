@@ -4,6 +4,8 @@
 #include "Messenger.h"
 #include "Message.h"
 
+
+class GoalFormulator;
 class Manager;
 
 class PlansOverseer : public Messenger
@@ -28,9 +30,11 @@ private:
 	//--------------------
 	//Constructor/Destructors
 	//--------------------
-	void HandleMessage(Message* pMessage);
+	void HandleMessage(Message* pMessage) override;
 
+
+	//Components of plans overseer
 	Planner* m_pPlanner;
-
+	GoalFormulator* m_pGoalFormulator;
 };
 

@@ -4,12 +4,18 @@
 
 #include "Action.h"
 #include "GroupingStructures.h"
+#include "Goal.h"
+#include "Message.h"
+
 
 class Manager;
+class Expectation;
+
+//list of references to strings
+using RefStringList = std::vector<std::string&>;
 
 //alias declarations -> easier to read and write
 using WorldStateMap = std::unordered_map<std::string, bool>;
-using Deviation = std::pair<std::string,bool>;
 
 class Observer
 {
@@ -21,21 +27,27 @@ public:
 
 
 	Observer(Manager* pManager);
-	virtual ~Observer() = 0;
+	virtual ~Observer();
 
-
-
-	//-----------------------------------------------
-	// Return a references to the world state
-	//-----------------------------------------------
-	WorldStateMap& GetCurrentWorldState();
 
 	//-----------------------------------------------
 	// Called Every frame
 	//-----------------------------------------------
 	virtual void Update(float fDeltaTime);
 
-protected:
+
+
+
+
+	Manager* GetManager();
+
+
+	RefStringList& GetExplanations();
+
+
+	void AddExplanation(Expectation* pExpect, std::string& rsExplanation);
+
+private:
 
 
 
@@ -44,7 +56,7 @@ protected:
 	//-------------------------------------------------------------------------
 
 
-	std::string& GenerateExplanation();
+	void GenerateExplanation();
 
 
 
@@ -56,40 +68,23 @@ protected:
 
 
 
-	//-----------------------------------------------
-	// Compares the current world state to expected
-	// world state
-	//-----------------------------------------------
-	 bool CheckDeviation(const std::string& rsWorldState);
-
-	//TODO: Potentially optimise this function
-	//Try not to call this function a lot -> could cause slow performance
-	 void FindExpectedWorldState();
-
 
 	//-------------------------------------------------------------------------
 	// Private Variables
 	//-------------------------------------------------------------------------
 
-	//Set this to true when
-	//
-	bool m_bWSUpdated;
 
-	int m_nCurrentAction;
+	//list of references to explanations
+	RefStringList m_arsExplanations;
 
-	WorldStateMap m_aCurrentWorldState;
-	WorldStateMap m_aExpectedWorldState;
+	//Map expectations to explanations
+	std::unordered_multimap<Expectation*, std::string> m_ExplanationMap;
 
+	Message* m_pExplanationMessage;
 
-	
+	Recipients m_anRecipients;
 
-	//stored here so that it doesn't
-	//have to get remade every time
-	//FindExpectedWS is called
-	std::vector<std::string&> m_arsSatisfiedWS;
-
-
-	std::vector<Deviation> m_apDeviations;
+	Expectations m_apDeviations;
 
 	Manager* m_pManager;
 };

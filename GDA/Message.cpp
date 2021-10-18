@@ -1,7 +1,7 @@
 #include "Message.h"
 
 //constructor with initialiser list to assign the reference
-Message::Message(std::vector<unsigned int>& anToID, std::string sMessage, void* pData, std::string sType) : m_anToID(anToID)
+Message::Message(Recipients& anToID, std::string&& sMessage, void* pData, std::string&& sType) : m_anToID(anToID)
 {
     m_pData = pData;
     m_sDataType = sType;

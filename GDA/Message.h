@@ -2,13 +2,16 @@
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
+
+using Recipients = std::vector<unsigned int>;
+
 class Message
 {
 public:
 	//-----------------------------------
 	// Constructor for creating a new message
 	//-----------------------------------
-	Message(std::vector<unsigned int>& anToID, std::string sMessage, void* pData = nullptr, std::string sType = "");
+	Message(Recipients& anToID, std::string&& sMessage, void* pData = nullptr, std::string&& sType = "");
 
 
 	//-----------------------------------
@@ -50,7 +53,7 @@ public:
 	std::string& GetDataType();
 protected:
 	//who the message is for
-	std::vector<unsigned int> m_anToID;
+	Recipients m_anToID;
 
 	//who the message has been checked by
 	std::unordered_map<int, bool> m_aPassed;

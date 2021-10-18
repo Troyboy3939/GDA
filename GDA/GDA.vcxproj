@@ -144,6 +144,7 @@
     <ClInclude Include="Blackboard.h" />
     <ClInclude Include="BlackboardData.h" />
     <ClInclude Include="Director.h" />
+    <ClInclude Include="Expectation.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="GroupingStructures.h" />
     <ClInclude Include="Heap.h" />
@@ -161,6 +162,7 @@
     <ClCompile Include="Blackboard.cpp" />
     <ClCompile Include="BlackboardData.cpp" />
     <ClCompile Include="Director.cpp" />
+    <ClCompile Include="Expectation.cpp" />
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Heap.cpp" />
     <ClCompile Include="Manager.cpp" />

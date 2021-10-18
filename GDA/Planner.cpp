@@ -27,13 +27,13 @@ bool Planner::GetPlan(Manager* pManager)
 	//-----------------------------------------------------------------------------------------
 
 	//list of available actions
-	auto& rapAvailableActions = pManager->GetAvailableAction();
+	auto& rapAvailableActions = pManager->GetAvailableActions();
 
 	//reference to the current plan
 	auto& rapPlan = pManager->GetCurrentPlan();
 
 	//reference to the expected world state
-	auto& rExpectedWorldState = pManager->GetExpectedWS();
+	auto& rExpectedWorldState = pManager->GetExpectations();
 
 	//Get a pointer to the goal of the manager
 	auto pGoal = pManager->GetGoal();
@@ -272,17 +272,14 @@ bool Planner::GetPlan(Manager* pManager)
 	}
 
 
-	//if they both have something in them
-	if (rapPlan.size() && rExpectedWorldState.size())
-	{
+	
 		//then return true
-		return true;
-	}
+		return !rapPlan.empty();
+	
 
 
 
-	//otherwise, one or both failed, so return false
-	return false;
+	
 
 	
 

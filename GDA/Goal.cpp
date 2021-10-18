@@ -3,12 +3,14 @@
 
 
 
-Goal::Goal(std::string& rsReqWS, std::function<bool(Manager* pManager)>* pIsValidFunction, std::string& rsType, void* pData)
+Goal::Goal(std::string& rsReqWS, std::function<bool(Manager* pMan)>& IsValidFunction, ExpecInitList expec, const std::string& rsType, void* pData)
 {
 
 	m_sReqWorldState = rsReqWS;
 
-	m_pIsValid = pIsValidFunction;
+	m_asExpectations.insert(m_asExpectations.begin(),expec);
+
+	m_fnIsValid = std::move(IsValidFunction);
 
 	m_pData = pData;
 	m_sDataType = rsType;
@@ -26,7 +28,7 @@ std::string& Goal::GetRequiredWorldState()
 
 bool Goal::IsValid(Manager* pManager)
 {
-	return (*m_pIsValid)(pManager);
+	return m_fnIsValid(pManager);
 }
 
 void* Goal::GetData()
@@ -47,5 +49,10 @@ void Goal::SetData(void* pData)
 void Goal::SetDataType(std::string& sType)
 {
 	m_sDataType = sType;
+}
+
+Expectations& Goal::GetExpectations()
+{
+	return m_asExpectations;
 }
 
