@@ -77,7 +77,7 @@
     <LibraryPath>$(SolutionDir)dependencies\GDA\;$(SolutionDir)dependencies\Bootstrap\x64\Debug;$(SolutionDir)dependencies\glfw\lib-vc2019;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)..\GDA\GDA;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)..\GDALib\GDA;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)dependencies\GDA\;$(SolutionDir)dependencies\Bootstrap\x64\Debug;$(SolutionDir)dependencies\glfw\lib-vc2019;$(LibraryPath)</LibraryPath>
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)temp\$(ProjectName)\$(Platform)\$(Configuration)\</OutDir>
@@ -172,13 +172,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application2D.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maths\Vector2.cpp" />
     <ClCompile Include="Maths\Vector3.cpp" />
+    <ClCompile Include="ResourceClass.cpp" />
+    <ClCompile Include="Villager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application2D.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="ResourceClass.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Villager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Project2D.rc" />

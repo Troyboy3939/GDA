@@ -2,6 +2,7 @@
 #include "Texture.h"
 #include "Font.h"
 #include "Input.h"
+#include "Villager.h"
 Application2D::Application2D()
 {
 	
@@ -22,7 +23,7 @@ bool Application2D::startup()
 	m_pFont = new aie::Font("./font/consolas.ttf", 12);
 	m_timer = 0;
 
-	
+	m_pVillager = new Villager(Vector2(0.0f, 0.0f), true, 10, 10, 10);
 
 	return true;
 }
@@ -31,6 +32,11 @@ void Application2D::shutdown()
 {
 	delete m_2dRenderer;
 	delete m_pFont;
+
+	if (m_pVillager)
+	{
+		delete m_pVillager;
+	}
 }
 
 void Application2D::update(float fDeltaTime) 
@@ -80,7 +86,10 @@ void Application2D::draw()
 	m_2dRenderer->begin();
 
 
-
+	if (m_pVillager)
+	{
+		m_pVillager->Draw(m_2dRenderer);
+	}
 	float fX, fY;
 
 	m_2dRenderer->getCameraPos(fX, fY);

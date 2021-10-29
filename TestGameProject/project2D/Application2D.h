@@ -4,7 +4,10 @@
 #include "Renderer2D.h"
 #include "Manager.h"
 
-class Application2D : public aie::Application {
+
+class Villager;
+class Application2D : public aie::Application
+{
 public:
 
 	Application2D();
@@ -20,6 +23,7 @@ protected:
 
 	aie::Renderer2D*	m_2dRenderer;
 
+	Villager* m_pVillager;
 
 	aie::Font* m_pFont;
 
