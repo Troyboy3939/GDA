@@ -25,6 +25,38 @@ Floor::Floor(Vector2 v2Pos, int nWidth, int nHeight)
 
 
 			m_apTiles.push_back(new Tile(v2Tile,m_pTileTexture));
+
+
+			auto nIndex = x * nHeight + y;
+
+			//Up and down connections
+			if(y > 0)
+			{
+				m_apTiles[nIndex]->AddNeighbour(m_apTiles[nIndex - 1]);
+				m_apTiles[nIndex - 1]->AddNeighbour(m_apTiles[nIndex]);
+			}
+
+			//Left and Right Connections
+			if (x > 0)
+			{
+				m_apTiles[nIndex]->AddNeighbour(m_apTiles[nIndex - nHeight]);
+				m_apTiles[nIndex - nHeight]->AddNeighbour(m_apTiles[nIndex]);
+
+				//Top right / Bottom Left
+				if (y > 0)
+				{
+					m_apTiles[nIndex]->AddNeighbour(m_apTiles[nIndex - nHeight - 1]);
+					m_apTiles[nIndex - nHeight - 1]->AddNeighbour(m_apTiles[nIndex]);
+				}
+
+				//Top Left / Bottom Right
+				if (y < nHeight - 2) // nHeight is number of tiles high, -1 because indexes start at 0, and -1 so that this doesn't go out back another row by mistake
+				{
+					m_apTiles[nIndex]->AddNeighbour(m_apTiles[nIndex - nHeight + 1]);
+					m_apTiles[nIndex - nHeight + 1]->AddNeighbour(m_apTiles[nIndex]);
+				}
+
+			}
 		}
 	}
 
@@ -71,4 +103,10 @@ void Floor::Draw(aie::Renderer2D* pRenderer)
 		}
 	}
 
+}
+
+void Floor::GetPath(Vector2 v2From, Vector2 v2To, std::vector<Vector2>& rav2Path)
+{
+
+	
 }
