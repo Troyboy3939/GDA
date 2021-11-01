@@ -3,7 +3,7 @@
 #include "Application.h"
 #include "Renderer2D.h"
 #include "Manager.h"
-
+#include "Floor.h"
 
 class Villager;
 class Application2D : public aie::Application
@@ -26,6 +26,11 @@ protected:
 	Villager* m_pVillager;
 
 	aie::Font* m_pFont;
+
+
+	Floor* m_pFloor;
+
+
 
 	float m_timer;
 };

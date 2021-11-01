@@ -1,0 +1,9 @@
+Renderer:
+- AIE 
+
+Textures:
+
+- Grass:
+https://opengameart.org/content/grass-texture-pack-2
+- Trees / Berry(edited from):
+https://opengameart.org/content/trees-top-down-fake-shadow

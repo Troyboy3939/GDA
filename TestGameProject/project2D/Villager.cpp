@@ -79,7 +79,7 @@ void Villager::Draw(aie::Renderer2D* pRenderer)
 		}
 
 		//Draw villager
-		pRenderer->drawCircle(m_v2Position.x, m_v2Position.y, 25);
+		pRenderer->drawCircle(m_v2Position.x, m_v2Position.y, 25,0.0f);
 		pRenderer->setRenderColour(1.0f, 1.0f, 1.0f);
 	}
 }

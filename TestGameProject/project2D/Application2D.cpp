@@ -5,7 +5,7 @@
 #include "Villager.h"
 Application2D::Application2D()
 {
-	
+
 }
 
 Application2D::~Application2D()
@@ -13,9 +13,9 @@ Application2D::~Application2D()
 
 }
 
-bool Application2D::startup() 
+bool Application2D::startup()
 {
-	
+
 	m_2dRenderer = new aie::Renderer2D();
 
 
@@ -24,6 +24,10 @@ bool Application2D::startup()
 	m_timer = 0;
 
 	m_pVillager = new Villager(Vector2(0.0f, 0.0f), true, 10, 10, 10);
+
+
+
+	m_pFloor = new Floor(Vector2(300.0f, 100.0f));
 
 	return true;
 }
@@ -37,9 +41,15 @@ void Application2D::shutdown()
 	{
 		delete m_pVillager;
 	}
+
+	if (m_pFloor)
+	{
+		delete m_pFloor;
+		m_pFloor = nullptr;
+	}
 }
 
-void Application2D::update(float fDeltaTime) 
+void Application2D::update(float fDeltaTime)
 {
 
 	m_timer += fDeltaTime;
@@ -70,7 +80,7 @@ void Application2D::update(float fDeltaTime)
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
 
-
+	m_pFloor->Update(fDeltaTime);
 
 
 }
@@ -78,7 +88,7 @@ void Application2D::update(float fDeltaTime)
 void Application2D::draw()
 {
 
-	
+
 	// wipe the screen to the background colour
 	clearScreen();
 
@@ -99,7 +109,7 @@ void Application2D::draw()
 	m_2dRenderer->drawText(m_pFont, fps, fX, 720 - 32 + fY);
 	m_2dRenderer->drawText(m_pFont, "Press ESC to quit!", fX, 720 - 64 + fY);
 
-
+	m_pFloor->Draw(m_2dRenderer);
 
 	// done drawing sprites
 	m_2dRenderer->end();
