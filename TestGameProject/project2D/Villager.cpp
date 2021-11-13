@@ -1,7 +1,34 @@
 #include "Villager.h"
 #include "ResourceClass.h"
-Villager::Villager(Vector2 v2Pos, bool bTeam, float fMaxAmount, float fRate, float fCycleTime) : GameObject(v2Pos)
+#include "Empire.h"
+
+Villager::Villager(Vector2 v2Location, Empire* pTeam, float fMaxAmount, float fRate, float fCycleTime)
 {
+	Initialise(v2Location,pTeam,fMaxAmount, fRate, fCycleTime);
+
+}
+Villager::Villager() : Unit()
+{
+	m_fCollectedCount = 0.0f;
+	m_fCollectingRate = 0.0f;
+	m_fMaximumAmount = 0.0f;
+	m_fCycleTime = 0.0f;
+
+	m_fTimer = 0.0f;
+
+	m_pResource = nullptr;
+
+	m_eUnitType = Unit::UType::Villager;
+
+	m_eAIState = State::Idle;
+}
+Villager::~Villager()
+{
+}
+void Villager::Initialise(Vector2 v2Location, Empire* pTeam, float fMaxAmount, float fRate, float fCycleTime)
+{
+	Unit::Initialise(v2Location,pTeam);
+
 	m_fCollectedCount = 0.0f;
 	m_fCollectingRate = fRate;
 	m_fMaximumAmount = fMaxAmount;
@@ -9,7 +36,7 @@ Villager::Villager(Vector2 v2Pos, bool bTeam, float fMaxAmount, float fRate, flo
 
 	m_fTimer = 0.0f;
 
-	m_bTeam = bTeam;
+	m_eUnitType = Unit::UType::Villager;
 
 }
 void Villager::AddResource(Resource* pResource)
@@ -62,24 +89,36 @@ void Villager::AddResource(Resource* pResource)
 void Villager::Update(float fDeltaTime)
 {
 
+	switch (m_eAIState)
+	{
+	case Villager::State::MiningGold:
+		break;
+	case Villager::State::CuttingWood:
+		break;
+	case Villager::State::PickingBerries:
+		break;
+	case Villager::State::Building:
+		break;
+	case Villager::State::Idle:
+		break;
+	default:
+		break;
+	}
+
+
+
 }
 
 void Villager::Draw(aie::Renderer2D* pRenderer)
 {
 	if (pRenderer)
 	{
-		//Change the colour depending on the team
-		if (m_bTeam)
-		{
-			pRenderer->setRenderColour(0.0f, 0.0f, 1.0f);
-		}
-		else
-		{
-			pRenderer->setRenderColour(1.0f, 0.0f, 0.0f);
-		}
+		auto v3Colour = m_pTeam->GetTeamColour();
+
+		pRenderer->setRenderColour(v3Colour.x,v3Colour.y,v3Colour.z);
 
 		//Draw villager
-		pRenderer->drawCircle(m_v2Position.x, m_v2Position.y, 25,0.0f);
+		pRenderer->drawCircle(m_v2Position.x, m_v2Position.y, 10.0f,0.0f);
 		pRenderer->setRenderColour(1.0f, 1.0f, 1.0f);
 	}
 }

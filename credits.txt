@@ -1,9 +1,21 @@
-Renderer:
-- AIE 
+-----------------------------------------------------------
+RENDERER:
+- AIE Teachers provided in 2019 / 2020
+-----------------------------------------------------------
 
-Textures:
+
+
+-----------------------------------------------------------
+TEXTURES:
+
+
 
 - Grass:
 https://opengameart.org/content/grass-texture-pack-2
-- Trees / Berry(edited from):
+---------
+
+- Trees / Berry(uses tree texture with red circle drawn on top of (by me)):
 https://opengameart.org/content/trees-top-down-fake-shadow
+---------
+
+-----------------------------------------------------------

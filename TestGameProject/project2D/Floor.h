@@ -1,8 +1,14 @@
 #pragma once
 #include "Texture.h"
 #include "Renderer2D.h"
-#include <vector>
+#include <deque>
 #include "Tile.h"
+#include <unordered_map>
+
+class FloorHeap;
+
+using Path = std::deque<Vector2>;
+
 class Floor
 {
 public:
@@ -27,7 +33,12 @@ public:
 	//-----------------------------------
 	// 	Draw Function -> Called every frame
 	//-----------------------------------
-	void GetPath(Vector2 v2From, Vector2 v2To, std::vector<Vector2>& rav2Path);
+	void GetPath(Vector2 v2From, Vector2 v2To, Path& rav2Path);
+
+	//-----------------------------------
+	// 	Returns a tile for a given position
+	//-----------------------------------
+	Tile* PosToTile(Vector2 v2Position);
 
 private:
 	Vector2 m_v2StartPos;
@@ -39,6 +50,8 @@ private:
 	int m_nHeight;
 	int m_nWidth;
 
+	FloorHeap* m_pOpenList;
+	std::unordered_map<Tile*, bool> m_aClosedList;
 
 };
 

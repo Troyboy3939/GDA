@@ -171,25 +171,47 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AIComponent.cpp" />
     <ClCompile Include="Application2D.cpp" />
+    <ClCompile Include="Building.cpp" />
+    <ClCompile Include="BuildingPool.cpp" />
+    <ClCompile Include="Empire.cpp" />
     <ClCompile Include="Floor.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="FloorHeap.cpp" />
+    <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maths\Vector2.cpp" />
     <ClCompile Include="Maths\Vector3.cpp" />
+    <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="ResourceClass.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Storage.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="TownCentre.cpp" />
+    <ClCompile Include="Unit.cpp" />
+    <ClCompile Include="UnitPool.cpp" />
     <ClCompile Include="Villager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AIComponent.h" />
     <ClInclude Include="Application2D.h" />
+    <ClInclude Include="Building.h" />
+    <ClInclude Include="BuildingPool.h" />
+    <ClInclude Include="Empire.h" />
     <ClInclude Include="Floor.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="FloorHeap.h" />
+    <ClInclude Include="InputComponent.h" />
+    <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="ResourceClass.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Storage.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="TownCentre.h" />
+    <ClInclude Include="Unit.h" />
+    <ClInclude Include="UnitPool.h" />
     <ClInclude Include="Villager.h" />
   </ItemGroup>
   <ItemGroup>

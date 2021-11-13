@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-
+#include "Texture.h"
 //forward Declaration
 class Villager;
 
@@ -17,7 +17,7 @@ public:
 		FOOD
 	};
 
-	Resource(float fAmountOfResources, Type eType, Vector2 v2Position);
+	Resource(float fAmountOfResources, Type eType, Vector2 v2Position, aie::Texture* pTexture = nullptr);
 	
 
 	void Update(float fDeltaTime);
@@ -36,6 +36,8 @@ private:
 
 	float m_fResourcesLeft;
 	Type m_eType;
+
+	aie::Texture* m_pTexture;
 
 };
 

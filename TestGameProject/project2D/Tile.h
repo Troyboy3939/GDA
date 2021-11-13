@@ -5,10 +5,11 @@
 #include <vector>
 
 
-class Resource;
+
 class Tile
 {
 public:
+using Neighbours = std::vector<Tile*>;
 	Tile(Vector2 v2Pos, aie::Texture* pTexture);
 	~Tile();
 
@@ -21,6 +22,21 @@ public:
 	float GetFScore();
 	float GetGScore();
 	float GetHScore();
+
+	void SetGScore(float fScore);
+	void SetHScore(float fScore);
+
+	Tile* GetPrevious();
+
+	void SetPrevious(Tile* pTile);
+
+
+	Vector2 GetPosition();
+
+
+	Neighbours& GetNeighours();
+
+	void Highlight();
 private:
 	Vector2 m_v2Position;
 	
@@ -32,7 +48,7 @@ private:
 	bool m_bDrawConnection;
 	bool m_bDrawGrid;
 
-	std::vector<Tile*> m_apNeighbours;
+	Neighbours m_apNeighbours;
 
 
 

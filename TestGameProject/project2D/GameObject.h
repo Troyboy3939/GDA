@@ -7,6 +7,11 @@ class GameObject
 {
 public:
 	GameObject(Vector2 v2Pos);
+	GameObject();
+	virtual ~GameObject();
+
+	virtual void Initialise(Vector2 v2Pos);
+
 
 	virtual void Update(float fDeltaTime) = 0;
 

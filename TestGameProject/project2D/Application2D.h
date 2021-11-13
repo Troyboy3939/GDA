@@ -4,8 +4,13 @@
 #include "Renderer2D.h"
 #include "Manager.h"
 #include "Floor.h"
+#include "ResourceManager.h"
 
+class Empire;
 class Villager;
+class UnitPool;
+class BuildingPool;
+
 class Application2D : public aie::Application
 {
 public:
@@ -23,12 +28,21 @@ protected:
 
 	aie::Renderer2D*	m_2dRenderer;
 
-	Villager* m_pVillager;
 
 	aie::Font* m_pFont;
 
 
+
+	Vector2 m_v2Mouse;
+
 	Floor* m_pFloor;
+	ResourceManager* m_pResourceManager;
+	Empire* m_pPlayer;
+	Empire* m_pAI;
+
+	UnitPool* m_pUnitPool;
+
+	BuildingPool* m_pBuildingPool;
 
 
 

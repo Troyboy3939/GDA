@@ -6,8 +6,14 @@ Tile::Tile(Vector2 v2Pos, aie::Texture* pTexture)
 	m_pTexture = pTexture;
 	m_v2Position = v2Pos;
 
+
+	m_fGScore = 0.0f;
+	m_fHScore = 0.0f;
+
+
 	m_bDrawConnection = false;
 	m_bDrawGrid = false;
+	m_pPrevious = nullptr;
 }
 
 Tile::~Tile()
@@ -23,7 +29,7 @@ void Tile::Draw(aie::Renderer2D* pRenderer)
 
 	if (pRenderer)
 	{
-		pRenderer->drawSprite(m_pTexture, m_v2Position.x, m_v2Position.y, m_pTexture->getWidth(), m_pTexture->getHeight(), 0, 100.0f);
+		pRenderer->drawSprite(m_pTexture, m_v2Position.x, m_v2Position.y, static_cast<float>( m_pTexture->getWidth()), static_cast<float>(m_pTexture->getHeight()), 0, 100.0f);
 
 		if (m_bDrawConnection)
 		{
@@ -60,6 +66,7 @@ void Tile::Draw(aie::Renderer2D* pRenderer)
 
 		}
 
+		//m_bDrawGrid = false;
 		pRenderer->setRenderColour(1.0f, 1.0f, 1.0f);
 	}
 }
@@ -82,4 +89,39 @@ float Tile::GetGScore()
 float Tile::GetHScore()
 {
 	return m_fHScore;
+}
+
+void Tile::SetGScore(float fScore)
+{
+	m_fGScore = fScore;
+}
+
+void Tile::SetHScore(float fScore)
+{
+	m_fHScore = fScore;
+}
+
+Tile* Tile::GetPrevious()
+{
+	return m_pPrevious;
+}
+
+void Tile::SetPrevious(Tile* pTile)
+{
+	m_pPrevious = pTile;
+}
+
+Vector2 Tile::GetPosition()
+{
+	return m_v2Position;
+}
+
+Tile::Neighbours & Tile::GetNeighours()
+{
+	return m_apNeighbours;
+}
+
+void Tile::Highlight()
+{
+	m_bDrawGrid = true;
 }

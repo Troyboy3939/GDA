@@ -1,5 +1,6 @@
 #include "Floor.h"
-
+#include "FloorHeap.h"
+#include <cmath>
 Floor::Floor(Vector2 v2Pos, int nWidth, int nHeight)
 {
 	//calculate number of tiles needed
@@ -12,6 +13,7 @@ Floor::Floor(Vector2 v2Pos, int nWidth, int nHeight)
 	//reserve that much space to avoid mass resizing
 	m_apTiles.reserve(nTileCount);
 
+	m_pOpenList = new FloorHeap();
 
 	m_pTileTexture = new aie::Texture("Textures/Grass.jpg");
 
@@ -78,6 +80,12 @@ Floor::~Floor()
 		m_pTileTexture = nullptr;
 	}
 
+	if (m_pOpenList)
+	{
+		delete m_pOpenList;
+		m_pOpenList = nullptr;
+	}
+
 }
 
 void Floor::Update(float fDeltaTime)
@@ -105,8 +113,176 @@ void Floor::Draw(aie::Renderer2D* pRenderer)
 
 }
 
-void Floor::GetPath(Vector2 v2From, Vector2 v2To, std::vector<Vector2>& rav2Path)
+void Floor::GetPath(Vector2 v2From, Vector2 v2To, std::deque<Vector2>& rav2Path)
 {
+	//clear the lists
 
 	
+	m_pOpenList->Clear();
+	
+	m_aClosedList.clear();
+	rav2Path.clear();
+
+	//find the tiles that they are on
+	auto pFrom = PosToTile(v2From);
+	auto pTo = PosToTile(v2To);
+	
+	//if both exist
+	if (pFrom && pTo)
+	{
+		//setup a pointer to iterate through the tiles
+		Tile* pTile;
+
+		m_pOpenList->Add(pFrom);
+
+		//while the pointer actually contains something
+		while (m_pOpenList->Size())
+		{
+		
+			pTile = m_pOpenList->GetTop();
+
+			//if the current tile is the tile we are trying to find, then exit, we've found the path
+			if (pTile == pTo)
+			{
+				break;
+			}
+
+			//Check if it exists
+			if (m_aClosedList[pTile])
+			{
+				continue;
+			}
+
+			//Add the tile to the closed list
+			m_aClosedList.insert_or_assign(pTile,true);
+
+			//get a reference to the array of neighbours
+			auto& rapNeigh = pTile->GetNeighours();
+
+			
+
+			//for every neighbour
+			for (int i = 0; i < rapNeigh.size(); i++)
+			{
+
+
+				auto pNeighbour = static_cast<Tile*>(rapNeigh[i]);
+
+				if (m_aClosedList[pNeighbour])
+				{
+					continue;
+				}
+
+
+				//set up Gscore -> distance from start tile to this tile(pNeighbour) -> this code added distance from pTile to pNeighbour
+				//Use magnitudeSq because it will have the same effect, however it is way faster because it doesn't have to get the square root
+
+				Vector2 v2ToNeighbour = pTile->GetPosition() - pNeighbour->GetPosition();
+				
+
+				auto fGScore = v2ToNeighbour.magnitudeSq();
+
+			
+				//Add GScore of previous node
+				if(pTile->GetPrevious())
+				{
+					fGScore += pTile->GetPrevious()->GetGScore();
+				}
+
+
+
+				//setup Hscore
+
+				Vector2 v2Heuristic = pNeighbour->GetPosition() - pTo->GetPosition();
+
+				
+
+
+
+				//if it has already been added to the openlist
+				if (m_pOpenList->Find(pNeighbour))
+				{
+					//and the new gScore is less than its current GSCore
+					if (fGScore < pNeighbour->GetGScore())
+					{
+						pNeighbour->SetGScore(fGScore);
+						pNeighbour->SetHScore(v2Heuristic.magnitudeSq());
+						pNeighbour->SetPrevious(pTile);
+					}
+				}
+				else
+				{
+
+					pNeighbour->SetGScore(fGScore);
+					pNeighbour->SetHScore(v2Heuristic.magnitudeSq());
+					pNeighbour->SetPrevious(pTile);
+
+
+					//Add neighbour to the openlist
+					m_pOpenList->Add(pNeighbour);
+
+				}
+
+				
+
+
+
+			}
+
+			
+
+		}
+
+
+			//if pTile isn't null than path has been found
+			while (pTile)
+			{
+				if (pTile == pFrom)
+				{
+					return;
+				}
+
+				rav2Path.push_front(pTile->GetPosition());
+
+				pTile = pTile->GetPrevious();
+
+				
+			}
+
+	}
+}
+
+Tile* Floor::PosToTile(Vector2 v2Position)
+{
+
+	//Vector from start position to the needed tile
+	Vector2 v2ToPosition = v2Position - m_v2StartPos;
+
+
+	if (v2ToPosition.x < -32 || v2ToPosition.y < -32)
+	{
+		return nullptr;
+	}
+
+	//    see how many times you can go across and then round down to nearest number, then convert it to an int
+	auto nX = static_cast<int>(roundf( v2ToPosition.x / m_pTileTexture->getWidth()));
+	
+
+	auto nY = static_cast<int>(roundf(v2ToPosition.y / m_pTileTexture->getHeight()));
+
+
+	//if they aren't negative
+	if(nX >= 0 && nY >= 0)
+	{
+		auto nIndex = (m_nHeight * nX) + nY;
+
+
+		if (nIndex > -1 && nIndex < m_apTiles.size())
+		{
+			return m_apTiles[nIndex];
+		}
+
+	}
+
+	return nullptr;
 }
