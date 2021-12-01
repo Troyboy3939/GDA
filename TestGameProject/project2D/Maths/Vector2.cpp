@@ -78,8 +78,7 @@ float Vector2::Distance(Vector2 &vec2)
 
 Vector2 Vector2::GetReflection()
 {
-	Vector2 v(-x, -y);
-	return v;
+	return Vector2(-x, -y);
 }
 
 bool Vector2::isZero()

@@ -14,10 +14,11 @@ public:
 	{
 		WOOD,
 		GOLD,
-		FOOD
+		FOOD,
+		NoResources
 	};
 
-	Resource(float fAmountOfResources, Type eType, Vector2 v2Position, aie::Texture* pTexture = nullptr);
+	Resource(float fAmountOfResources, Type eType, Tile* pTile, aie::Texture* pTexture = nullptr);
 	
 
 	void Update(float fDeltaTime);
@@ -32,12 +33,15 @@ public:
 
 	float GetResourcesLeft();
 
+
+	Vector2 GetPosition();
 private:
 
 	float m_fResourcesLeft;
 	Type m_eType;
 
 	aie::Texture* m_pTexture;
+	
 
 };
 

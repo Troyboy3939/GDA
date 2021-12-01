@@ -173,6 +173,9 @@
   <ItemGroup>
     <ClCompile Include="AIComponent.cpp" />
     <ClCompile Include="Application2D.cpp" />
+    <ClCompile Include="Archer.cpp" />
+    <ClCompile Include="ArcheryRange.cpp" />
+    <ClCompile Include="Barracks.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="BuildingPool.cpp" />
     <ClCompile Include="Empire.cpp" />
@@ -180,15 +183,24 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="FloorHeap.cpp" />
     <ClCompile Include="InputComponent.cpp" />
+    <ClCompile Include="Knight.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maths\Vector2.cpp" />
     <ClCompile Include="Maths\Vector3.cpp" />
+    <ClCompile Include="MilitaryUnit.cpp" />
+    <ClCompile Include="Pikeman.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="ResourceClass.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Icon.cpp" />
+    <ClCompile Include="Scout.cpp" />
+    <ClCompile Include="Skirmisher.cpp" />
+    <ClCompile Include="Stable.cpp" />
     <ClCompile Include="Storage.cpp" />
+    <ClCompile Include="Swordsman.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TownCentre.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="UnitPool.cpp" />
     <ClCompile Include="Villager.cpp" />
@@ -196,6 +208,9 @@
   <ItemGroup>
     <ClInclude Include="AIComponent.h" />
     <ClInclude Include="Application2D.h" />
+    <ClInclude Include="Archer.h" />
+    <ClInclude Include="ArcheryRange.h" />
+    <ClInclude Include="Barracks.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="BuildingPool.h" />
     <ClInclude Include="Empire.h" />
@@ -203,13 +218,22 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="FloorHeap.h" />
     <ClInclude Include="InputComponent.h" />
+    <ClInclude Include="Knight.h" />
+    <ClInclude Include="MilitaryUnit.h" />
+    <ClInclude Include="Pikeman.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="ResourceClass.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Icon.h" />
+    <ClInclude Include="Scout.h" />
+    <ClInclude Include="Skirmisher.h" />
+    <ClInclude Include="Stable.h" />
     <ClInclude Include="Storage.h" />
+    <ClInclude Include="Swordsman.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TownCentre.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="UnitPool.h" />
     <ClInclude Include="Villager.h" />

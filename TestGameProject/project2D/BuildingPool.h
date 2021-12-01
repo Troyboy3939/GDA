@@ -13,6 +13,11 @@ public:
 
 	void Return(Building* pBuilding);
 
+
+	Building* GetBuildingAtLocation(Vector2 v2Location);
+
+	Building* GetClosestBuilding(Building* pBuilding, float fRadius, Empire* pExclusion = nullptr);
+
 private:
 
 	Building* CreateBuilding(Building::BType eType);

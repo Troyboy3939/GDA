@@ -1,8 +1,8 @@
 #include "GameObject.h"
-
-GameObject::GameObject(Vector2 v2Pos)
+#include "Tile.h"
+GameObject::GameObject(Tile* pTile)
 {
-    Initialise(v2Pos);
+    Initialise(pTile);
 }
 
 GameObject::GameObject()
@@ -14,9 +14,19 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::Initialise(Vector2 v2Pos)
+void GameObject::Initialise(Tile* pTile)
 {
-    m_v2Position = v2Pos;
+    auto nWidth = pTile->GetTexture()->getWidth();
+    auto nHeight = pTile->GetTexture()->getHeight();
+
+    pTile->SetOn(false);
+    Vector2 v2Position = pTile->GetPosition();
+
+    
+    m_pTile = pTile;
+
+         
+    m_v2Position = v2Position;
 }
 
 Vector2 GameObject::GetPosition()

@@ -2,15 +2,20 @@
 
 #include "Renderer2D.h"
 #include "Vector2.h"
+#include <vector>
+class Icon;
+class Tile;
+using Icons = std::vector<Icon*>;
+
 
 class GameObject
 {
 public:
-	GameObject(Vector2 v2Pos);
+	GameObject(Tile* pTile);
 	GameObject();
 	virtual ~GameObject();
 
-	virtual void Initialise(Vector2 v2Pos);
+	virtual void Initialise(Tile* pTile);
 
 
 	virtual void Update(float fDeltaTime) = 0;
@@ -22,6 +27,6 @@ public:
 	void SetPosition(Vector2 v2Pos);
 protected:
 	Vector2 m_v2Position;
-
+	Tile* m_pTile;
 };
 

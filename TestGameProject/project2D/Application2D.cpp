@@ -31,7 +31,7 @@ bool Application2D::startup()
 	
 	m_pFloor = new Floor(Vector2(0.0f, 0.0f),75,75);
 
-	m_pResourceManager = new ResourceManager(100,400,400);
+	m_pResourceManager = new ResourceManager(100,400,400,m_pFloor);
 
 
 
@@ -128,8 +128,8 @@ void Application2D::update(float fDeltaTime)
 	m_pAI->Update(fDeltaTime);
 
 
-	m_v2Mouse.x = pInput->getMouseX() + fCamPosX;
-	m_v2Mouse.y = pInput->getMouseY() + fCamPosY;
+	m_v2Mouse.x = pInput->getMouseX();
+	m_v2Mouse.y = pInput->getMouseY();
 
 	m_pResourceManager->Update(fDeltaTime);
 }
@@ -147,6 +147,7 @@ void Application2D::draw()
 	float fX, fY;
 
 	m_2dRenderer->getCameraPos(fX, fY);
+
 
 	
 	

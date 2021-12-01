@@ -1,6 +1,9 @@
 #include "Floor.h"
 #include "FloorHeap.h"
 #include <cmath>
+#include "ResourceManager.h"
+
+
 Floor::Floor(Vector2 v2Pos, int nWidth, int nHeight)
 {
 	//calculate number of tiles needed
@@ -9,6 +12,7 @@ Floor::Floor(Vector2 v2Pos, int nWidth, int nHeight)
 
 	m_nHeight = nHeight;
 	m_nWidth = nWidth;
+
 
 	//reserve that much space to avoid mass resizing
 	m_apTiles.reserve(nTileCount);
@@ -28,34 +32,36 @@ Floor::Floor(Vector2 v2Pos, int nWidth, int nHeight)
 
 			m_apTiles.push_back(new Tile(v2Tile,m_pTileTexture));
 
+			
+
 
 			auto nIndex = x * nHeight + y;
 
 			//Up and down connections
 			if(y > 0)
 			{
-				m_apTiles[nIndex]->AddNeighbour(m_apTiles[nIndex - 1]);
-				m_apTiles[nIndex - 1]->AddNeighbour(m_apTiles[nIndex]);
+				m_apTiles[nIndex]->AddNeighbour(m_apTiles[nIndex - 1], Tile::Connection::Down);
+				m_apTiles[nIndex - 1]->AddNeighbour(m_apTiles[nIndex], Tile::Connection::Top);
 			}
 
 			//Left and Right Connections
 			if (x > 0)
 			{
-				m_apTiles[nIndex]->AddNeighbour(m_apTiles[nIndex - nHeight]);
-				m_apTiles[nIndex - nHeight]->AddNeighbour(m_apTiles[nIndex]);
+				m_apTiles[nIndex]->AddNeighbour(m_apTiles[nIndex - nHeight], Tile::Connection::Left);
+				m_apTiles[nIndex - nHeight]->AddNeighbour(m_apTiles[nIndex],Tile::Connection::Right);
 
 				//Top right / Bottom Left
 				if (y > 0)
 				{
-					m_apTiles[nIndex]->AddNeighbour(m_apTiles[nIndex - nHeight - 1]);
-					m_apTiles[nIndex - nHeight - 1]->AddNeighbour(m_apTiles[nIndex]);
+					m_apTiles[nIndex]->AddNeighbour(m_apTiles[nIndex - nHeight - 1], Tile::Connection::BottomLeft);
+					m_apTiles[nIndex - nHeight - 1]->AddNeighbour(m_apTiles[nIndex], Tile::Connection::TopRight);
 				}
 
 				//Top Left / Bottom Right
 				if (y < nHeight - 2) // nHeight is number of tiles high, -1 because indexes start at 0, and -1 so that this doesn't go out back another row by mistake
 				{
-					m_apTiles[nIndex]->AddNeighbour(m_apTiles[nIndex - nHeight + 1]);
-					m_apTiles[nIndex - nHeight + 1]->AddNeighbour(m_apTiles[nIndex]);
+					m_apTiles[nIndex]->AddNeighbour(m_apTiles[nIndex - nHeight + 1], Tile::Connection::TopLeft);
+					m_apTiles[nIndex - nHeight + 1]->AddNeighbour(m_apTiles[nIndex], Tile::Connection::BottomRight);
 				}
 
 			}
@@ -113,7 +119,7 @@ void Floor::Draw(aie::Renderer2D* pRenderer)
 
 }
 
-void Floor::GetPath(Vector2 v2From, Vector2 v2To, std::deque<Vector2>& rav2Path)
+void Floor::GetPath(Vector2 v2From, Vector2 v2To, Path& rav2Path)
 {
 	//clear the lists
 
@@ -147,6 +153,11 @@ void Floor::GetPath(Vector2 v2From, Vector2 v2To, std::deque<Vector2>& rav2Path)
 				break;
 			}
 
+			if (!pTile->GetOn())
+			{
+				continue;
+			}
+
 			//Check if it exists
 			if (m_aClosedList[pTile])
 			{
@@ -167,6 +178,11 @@ void Floor::GetPath(Vector2 v2From, Vector2 v2To, std::deque<Vector2>& rav2Path)
 
 
 				auto pNeighbour = static_cast<Tile*>(rapNeigh[i]);
+
+				if (!pNeighbour)
+				{
+					continue;
+				}
 
 				if (m_aClosedList[pNeighbour])
 				{
@@ -251,6 +267,7 @@ void Floor::GetPath(Vector2 v2From, Vector2 v2To, std::deque<Vector2>& rav2Path)
 
 	}
 }
+
 
 Tile* Floor::PosToTile(Vector2 v2Position)
 {
