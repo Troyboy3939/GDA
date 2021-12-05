@@ -46,9 +46,9 @@ public:
 
     virtual float GetProgress() = 0;
 
-    Icon* GetCurrentAction();
+    Icon::IType GetCurrentAction();
 
-    void AddActionToQueue(Icon* pIcon);
+    void AddActionToQueue(Icon::IType eIcon);
 
     int GetActionsLeft();
 
@@ -71,7 +71,7 @@ protected:
 
     void TurnTilesOff();
 
-    Icons m_aActionQueue;
+    std::vector<Icon::IType> m_aActionQueue;
 
     aie::Texture* m_pTexture;
     Floor* m_pFloor;

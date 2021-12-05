@@ -11,6 +11,12 @@ public:
 
 	Node(Action* pAction, Node* pParent, float fHScore ,Goal* pGoal = nullptr);
 
+	Node();
+
+	void Initialise(Action* pAction, Node* pParent, float fHScore, Goal* pGoal = nullptr);
+
+
+
 	void SetParent(Node* pNode);
 
 

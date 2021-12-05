@@ -18,7 +18,7 @@ public:
 	//---------------------	
 
 	Messenger(Blackboard* pBlackboard);
-	virtual ~Messenger() = 0;
+	virtual ~Messenger();
 
 	//---------------------
 	// Called every frame

@@ -184,7 +184,7 @@ void Villager::SetIdle()
 
 }
 
-void Villager::CreateBuilding(Building::BType eBuildingType, Vector2 v2Location)
+Building* Villager::CreateBuilding(Building::BType eBuildingType, Vector2 v2Location)
 {
 	m_eAIState = State::Building;
 
@@ -196,9 +196,10 @@ void Villager::CreateBuilding(Building::BType eBuildingType, Vector2 v2Location)
 		//Add a building
 		m_pBuilding = m_pTeam->AddBuilding(eBuildingType,v2Location);
 
-		
+		return m_pBuilding;
 	}
 
+	return nullptr;
 }
 
 void Villager::HelpBuild(Building::BType eBuildingType, Vector2 v2Location)
@@ -230,6 +231,21 @@ void Villager::Upgrade(Icon::IType eUpgrade)
 		m_nSpeUpgrade++;
 	}
 
+}
+
+Resource* Villager::GetResource()
+{
+	return m_pResource;
+}
+
+Villager::State Villager::GetState()
+{
+	return m_eAIState;
+}
+
+Building* Villager::GetBuilding()
+{
+	return m_pBuilding;
 }
 
 bool Villager::CollectResource(float fDeltaTime)

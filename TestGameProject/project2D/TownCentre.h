@@ -20,8 +20,6 @@ public:
     void Draw(aie::Renderer2D* pRenderer);
 
     float GetProgress() override;
-
-
 private:
 
     float m_fVillagerTime;

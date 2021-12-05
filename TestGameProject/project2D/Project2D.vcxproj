@@ -120,7 +120,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)bootstrap;$(SolutionDir)dependencies/imgui;$(SolutionDir)dependencies/glm;$(SolutionDir)GOAP;$(ProjectDir)MathsHeaders;%(AdditionalIncludeDirectories);$(SolutionDir)..\GDA</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)bootstrap;$(SolutionDir)dependencies/imgui;$(SolutionDir)dependencies/glm;$(ProjectDir)MathsHeaders;%(AdditionalIncludeDirectories);$(SolutionDir)..\GDALib\GDA</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -178,6 +178,7 @@
     <ClCompile Include="Barracks.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="BuildingPool.cpp" />
+    <ClCompile Include="EcoManager.cpp" />
     <ClCompile Include="Empire.cpp" />
     <ClCompile Include="Floor.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -187,6 +188,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maths\Vector2.cpp" />
     <ClCompile Include="Maths\Vector3.cpp" />
+    <ClCompile Include="MilitaryManager.cpp" />
     <ClCompile Include="MilitaryUnit.cpp" />
     <ClCompile Include="Pikeman.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
@@ -213,12 +215,14 @@
     <ClInclude Include="Barracks.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="BuildingPool.h" />
+    <ClInclude Include="EcoManager.h" />
     <ClInclude Include="Empire.h" />
     <ClInclude Include="Floor.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="FloorHeap.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="Knight.h" />
+    <ClInclude Include="MilitaryManager.h" />
     <ClInclude Include="MilitaryUnit.h" />
     <ClInclude Include="Pikeman.h" />
     <ClInclude Include="PlayerComponent.h" />

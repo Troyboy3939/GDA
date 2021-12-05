@@ -107,7 +107,18 @@ void UI::Draw(aie::Renderer2D* pRenderer, Vector2 v2CameraLocation)
 	//that it might be creating such as a villager or an upgrade
 	if (pBuilding)
 	{
-		pAction = pBuilding->GetCurrentAction();
+		
+		if (m_nCurrentSelections >= 0 && m_nCurrentSelections < m_aaIcons.size())
+		{
+			for (auto pIcon : m_aaIcons[m_nCurrentSelections])
+			{
+				if (pIcon->GetIconType() == pBuilding->GetCurrentAction())
+				{
+					pAction = pIcon;
+					break;
+				}
+			}
+		}
 
 		auto fProgress = pBuilding->GetProgress();
 

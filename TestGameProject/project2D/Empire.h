@@ -12,7 +12,7 @@
 class BuildingPool;
 class UnitPool;
 
-
+class TownCentre;
 class Building;
 class Floor;
 class ResourceManager;
@@ -116,6 +116,8 @@ public:
 
 	Building* AddBuilding(Building::BType eType, Vector2 v2Location);
 
+	TownCentre* GetTownCentre();
+	
 
 	void UpgradeUnit(Icon::IType eUpgrade);
 
@@ -127,9 +129,22 @@ public:
 	void ReturnUnit(Unit* pUnit);
 	void ReturnBuilding(Building* pUnit);
 
+	bool HasBuilding(Building::BType eType);
+
 
 	int GetAge();
 	void SetAge(int nAge);
+
+	Unit* GetLatestUnit(Unit::UType eType);
+
+
+	int GetUnitCount();
+
+
+	std::vector<Unit*>& GetUnits();
+
+
+	Villager* GetIdleVillager();
 private:
 	//resources
 	float m_fGold;

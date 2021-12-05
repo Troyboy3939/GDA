@@ -30,6 +30,7 @@
     <ClCompile Include="GDA\Message.cpp" />
     <ClCompile Include="GDA\Messenger.cpp" />
     <ClCompile Include="GDA\Node.cpp" />
+    <ClCompile Include="GDA\NodePool.cpp" />
     <ClCompile Include="GDA\Observer.cpp" />
     <ClCompile Include="GDA\Planner.cpp" />
     <ClCompile Include="GDA\PlansOverseer.cpp" />
@@ -48,6 +49,7 @@
     <ClInclude Include="GDA\Message.h" />
     <ClInclude Include="GDA\Messenger.h" />
     <ClInclude Include="GDA\Node.h" />
+    <ClInclude Include="GDA\NodePool.h" />
     <ClInclude Include="GDA\Observer.h" />
     <ClInclude Include="GDA\Planner.h" />
     <ClInclude Include="GDA\PlansOverseer.h" />
@@ -154,6 +156,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\GDALib\GDA</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

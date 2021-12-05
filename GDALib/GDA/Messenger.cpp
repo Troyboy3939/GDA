@@ -14,6 +14,10 @@ Messenger::Messenger(Blackboard* pBlackboard)
 
 }
 
+Messenger::~Messenger()
+{
+}
+
 bool Messenger::SendMessage(Message* pMessage)
 {
 	//if the message and next person exist

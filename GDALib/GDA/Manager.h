@@ -62,7 +62,7 @@ public:
     //-------------------
     // Tells Manager to update its current plan
     //-------------------
-    void GetNewPlan();
+    virtual void GetNewPlan();
 
     //-------------------
     // Returns index of action being performed
@@ -96,7 +96,7 @@ public:
     Goal* GetMitigation();
 
 	
-private:
+protected:
     //Current goal of this manager
     Goal* m_pGoal;
     Goal* m_pMitigation;

@@ -13,7 +13,8 @@ using WorldStateList = std::vector<std::string>;
 class Action
 {
 public:
-	Action(float fCost, std::function<bool(Manager* pManager)>* pIsValidFuction, std::string& rsType,void* pData = nullptr);
+	Action(float fCost, std::function<bool(Manager* pManager)>& rfnIsValidFuction, const std::string& rsSatWS, std::initializer_list<std::string> asReq, const std::string& rsType,void* pData = nullptr);
+	Action(float fCost, std::function<bool(Manager* pManager)>& rfnIsValidFuction, const std::string& rsSatWS, std::initializer_list<std::string> asReq);
 
 	virtual ~Action() = default;
 
@@ -61,6 +62,12 @@ public:
 	// Updates the type of data
 	//------------------------------------
 	void SetDataType(std::string& rsType);
+
+
+	void SetID(int nID);
+
+	int GetID();
+
 protected:
 	
 
@@ -74,13 +81,16 @@ protected:
 	float m_fCost;
 
 	//function pointer to check whether the action can be completed or not
-	std::function<bool(Manager* pManager)>* m_pIsValid;
+	std::function<bool(Manager* pManager)> m_pIsValid;
 
 	//Data included with the action
 	void* m_pData;
 
 	//type of m_pData
 	std::string m_sDataType;
+
+	int m_nID;
+
 
 };
 

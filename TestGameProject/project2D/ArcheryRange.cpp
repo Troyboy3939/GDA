@@ -35,7 +35,7 @@ void ArcheryRange::Update(float fDeltaTime)
 
 		
 
-		switch (pAction->GetIconType())
+		switch (pAction)
 		{
 		case Icon::IType::ArcAtt:
 		case Icon::IType::ArcSpe:
@@ -51,7 +51,7 @@ void ArcheryRange::Update(float fDeltaTime)
 
 				if (m_fTimer >= m_fUpgradeTime)
 				{
-					m_pTeam->UpgradeUnit(pAction->GetIconType());
+					m_pTeam->UpgradeUnit(pAction);
 					m_fTimer = -1.0f;
 
 					//erase this element off the queue
@@ -78,7 +78,7 @@ void ArcheryRange::Update(float fDeltaTime)
 				{
 					Unit::UType eUnit;
 
-					if (pAction->GetIconType() == Icon::IType::Archer)
+					if (pAction == Icon::IType::Archer)
 					{
 						eUnit = Unit::UType::Archer;
 					}
@@ -112,7 +112,7 @@ float ArcheryRange::GetProgress()
 {
 	if (!m_aActionQueue.empty())
 	{
-		switch (m_aActionQueue[0]->GetIconType())
+		switch (m_aActionQueue[0])
 		{
 		case Icon::IType::Archer:
 		case Icon::IType::Skirmisher:

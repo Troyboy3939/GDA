@@ -73,6 +73,11 @@ void PlansOverseer::RiskAnalysis(Manager* pManager)
 	}
 }
 
+void PlansOverseer::SetBlackboard(Blackboard* pBlackboard)
+{
+	m_pBlackboard = pBlackboard;
+}
+
 void PlansOverseer::HandleMessage(Message* pMessage)
 {
 

@@ -137,7 +137,7 @@ void Floor::GetPath(Vector2 v2From, Vector2 v2To, Path& rav2Path)
 	if (pFrom && pTo)
 	{
 		//setup a pointer to iterate through the tiles
-		Tile* pTile;
+		Tile* pTile = nullptr;
 
 		m_pOpenList->Add(pFrom);
 
@@ -168,7 +168,7 @@ void Floor::GetPath(Vector2 v2From, Vector2 v2To, Path& rav2Path)
 			m_aClosedList.insert_or_assign(pTile,true);
 
 			//get a reference to the array of neighbours
-			auto& rapNeigh = pTile->GetNeighours();
+			auto& rapNeigh = pTile->GetNeighbours();
 
 			
 
@@ -302,4 +302,34 @@ Tile* Floor::PosToTile(Vector2 v2Position)
 	}
 
 	return nullptr;
+}
+
+bool Floor::CanBuildAt(Vector2 v2Position)
+{
+	auto pTile = PosToTile(v2Position);
+
+	auto bCan = false;
+
+	if (pTile)
+	{
+		if (pTile->GetOn())
+		{
+			auto& rapNeigh = pTile->GetNeighbours();
+
+			if (rapNeigh[static_cast<int>(Tile::Connection::Top)] && rapNeigh[static_cast<int>(Tile::Connection::Top)]->GetOn())
+			{
+				if (rapNeigh[static_cast<int>(Tile::Connection::Right)] && rapNeigh[static_cast<int>(Tile::Connection::Right)]->GetOn())
+				{
+					if (rapNeigh[static_cast<int>(Tile::Connection::TopRight)] && rapNeigh[static_cast<int>(Tile::Connection::TopRight)]->GetOn())
+					{
+						bCan = true;
+					}
+				}
+			}
+			
+		}
+	}
+
+	return bCan;
+	
 }

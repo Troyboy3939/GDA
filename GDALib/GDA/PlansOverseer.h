@@ -41,6 +41,8 @@ public:
 	void RiskAnalysis(Manager* pManager);
 
 
+	void SetBlackboard(Blackboard* pBlackboard);
+
 private:
 
 	//--------------------

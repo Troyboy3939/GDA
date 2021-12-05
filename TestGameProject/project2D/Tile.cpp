@@ -129,7 +129,7 @@ Vector2 Tile::GetPosition()
 	return m_v2Position;
 }
 
-Tile::Neighbours & Tile::GetNeighours()
+Tile::Neighbours & Tile::GetNeighbours()
 {
 	return m_apNeighbours;
 }

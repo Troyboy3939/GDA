@@ -2,7 +2,7 @@
 #include "Goal.h"
 #include "Action.h"
 #include "Node.h"
-
+#include "NodePool.h"
 Tree::Tree(Goal* pGoal)
 {
 
@@ -17,7 +17,6 @@ Tree::Tree()
 
 Tree::~Tree()
 {
-	Delete(m_pRootNode);
 }
 
 
@@ -31,15 +30,13 @@ void Tree::AddNode(Node* pNode, Node* pParent)
 
 }
 
-void Tree::Clear()
+void Tree::Clear(NodePool* pNodePool)
 {
-	Delete(m_pRootNode);
+	Delete(m_pRootNode, pNodePool);
 }
 
 void Tree::SetGoal(Goal* pGoal)
 {
-	//make sure the tree is empty
-	Clear();
 
 	//Set the root node
 	//                      Action, Parent, hSCore, Goal
@@ -55,7 +52,7 @@ Node* Tree::GetGoal()
 	return m_pRootNode;
 }
 
-void Tree::Delete(Node* pNode)
+void Tree::Delete(Node* pNode, NodePool* pNodePool)
 {
 	if (pNode && m_pRootNode)
 	{
@@ -64,13 +61,20 @@ void Tree::Delete(Node* pNode)
 		//for every child
 		for (int i = 0; i < rChildren.size(); i++)
 		{
-			Delete(rChildren[i]);
+			Delete(rChildren[i],pNodePool);
 		}
 
-		
+		rChildren.clear();
 
 		//if there are no children, delete
-		delete pNode;
+		if (pNodePool)
+		{
+			pNode->SetParent(nullptr);
+
+
+			pNodePool->Return(pNode);
+
+		}
 
 	}
 }

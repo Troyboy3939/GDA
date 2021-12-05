@@ -40,7 +40,7 @@ void Barracks::Update(float fDeltaTime)
 
 
 
-		switch (pAction->GetIconType())
+		switch (pAction)
 		{
 		case Icon::IType::InfAtt:
 		case Icon::IType::InfSpe:
@@ -56,7 +56,7 @@ void Barracks::Update(float fDeltaTime)
 
 				if (m_fTimer >= m_fUpgradeTime)
 				{
-					m_pTeam->UpgradeUnit(pAction->GetIconType());
+					m_pTeam->UpgradeUnit(pAction);
 					m_fTimer = -1.0f;
 
 					//erase this element off the queue
@@ -83,7 +83,7 @@ void Barracks::Update(float fDeltaTime)
 				{
 					Unit::UType eUnit;
 
-					if (pAction->GetIconType() == Icon::IType::Swordsman)
+					if (pAction == Icon::IType::Swordsman)
 					{
 						eUnit = Unit::UType::Swordsman;
 					}
@@ -117,7 +117,7 @@ float Barracks::GetProgress()
 {
 	if (!m_aActionQueue.empty())
 	{
-		switch (m_aActionQueue[0]->GetIconType())
+		switch (m_aActionQueue[0])
 		{
 		case Icon::IType::Swordsman:
 		case Icon::IType::Pikeman:

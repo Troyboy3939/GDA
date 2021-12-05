@@ -41,11 +41,17 @@ public:
 
 	void StartCollectingResource(Resource* pResource);
 	void SetIdle();
-	void CreateBuilding(Building::BType eBuildingType, Vector2 v2Location);
+	Building* CreateBuilding(Building::BType eBuildingType, Vector2 v2Location);
 
 	void HelpBuild(Building::BType eBuildingType, Vector2 v2Location);
 
 	void Upgrade(Icon::IType eUpgrade);
+
+	Resource* GetResource();
+
+	State GetState();
+
+	Building* GetBuilding();
 private:
 	bool CollectResource(float fDeltaTime);
 	void ReturnResource(float fDeltaTime);

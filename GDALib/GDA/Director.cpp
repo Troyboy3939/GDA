@@ -28,7 +28,7 @@ Director::Director(Manager* pManager, int nPickingType)
 	}
 	else
 	{
-		m_PickFunction = [=]() {PickRandomHighest(); };
+		m_PickFunction = [=]() {PickRandomHighest();};
 	}
 
 }

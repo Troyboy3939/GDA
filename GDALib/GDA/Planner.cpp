@@ -9,10 +9,32 @@ Planner::Planner()
 {
 	//Create a tree
 	m_pTree = new Tree();
+
+	m_pOpenList = new Heap();
+
+	m_pNodePool = new NodePool();
 }
 
 Planner::~Planner()
 {
+	if (m_pTree)
+	{
+		delete m_pTree;
+		m_pTree = nullptr;
+	}
+
+	if (m_pOpenList)
+	{
+		delete m_pOpenList;
+		m_pOpenList = nullptr;
+	}
+
+	if (m_pNodePool)
+	{
+		delete m_pNodePool;
+		m_pNodePool = nullptr;
+	}
+
 }
 
 
@@ -41,7 +63,7 @@ bool Planner::GetPlan(Manager* pManager)
 
 
 	//Set up the tree
-	m_pTree->Clear();
+	m_pTree->Clear(m_pNodePool);
 	m_pTree->SetGoal(pGoal);
 
 	//boolean to exit the while loop
@@ -49,7 +71,7 @@ bool Planner::GetPlan(Manager* pManager)
 
 	//prepare data structures (member variables so that they aren't created for every new plan, its quicker to clear them)
 	m_pOpenList->Clear();
-	m_pClosedList->clear();
+	m_ClosedList.clear();
 	
 	//clear the output references
 	rExpectedWorldState.clear();
@@ -89,7 +111,8 @@ bool Planner::GetPlan(Manager* pManager)
 			{
 
 
-				auto pNewNode = new Node(pAction,pNode, static_cast<float>(pAction->GetReqWS().size()));
+				auto pNewNode = m_pNodePool->GetNode();
+				pNewNode->Initialise(pAction,pNode, static_cast<float>(pAction->GetReqWS().size()));
 
 				//Add node to the tree 
 				m_pTree->AddNode(pNewNode, pNode);
@@ -106,19 +129,24 @@ bool Planner::GetPlan(Manager* pManager)
 	// Start looking at more actions that meet the added actions requirements, until there are no more requirements left (plan found)
 	//-----------------------------------------------------------------------------------------
 
-
+	//Get a reference to the current world state
+	auto& rCurrentWS = pManager->GetCurrentWS();
 	
+	auto bExit = false;
+
+
 	//while the openlist has something in it
 	while (m_pOpenList->Size())
 	{
+		
+
 		//Look at the cheapest action currently on the tree
 		pNode = m_pOpenList->GetTop();
 
 
 		//if the node is on the closed list, skip it
-		if (m_pClosedList->operator[](pNode))
+		if (m_ClosedList[pNode])
 		{
-
 			continue;
 		}
 
@@ -132,7 +160,7 @@ bool Planner::GetPlan(Manager* pManager)
 		
 
 		//add the node to the closed list
-		m_pClosedList->insert_or_assign(pNode, true);
+		m_ClosedList[pNode] = true;
 
 
 
@@ -141,15 +169,31 @@ bool Planner::GetPlan(Manager* pManager)
 		//Get a reference to the array of world states required by its parent
 		auto& rasParentRequirements = pNode->GetReqWS();
 
+		auto& raCurrentWS = pManager->GetCurrentWS();
 
 
+		//unfornutately needed for every requirement
+		//auto asActionRequirementsLeft = rasParentRequirements;
 
-
-		//for every available action
+	
+		//for every available action check if this action satifies the requirement of its potential parent and then add it to the tree if it does
 		for (int i = 0; i < rapAvailableActions.size(); i++)
 		{
+			auto bReturn = true;
+
+
+			auto pNewNode = m_pNodePool->GetNode();
+			
+
+			auto rapReqList = pNewNode->GetReqWS();
+			rapReqList.clear();
+
+			//insert parents requirements onto this
+			rapReqList.insert(rapReqList.end(), rasParentRequirements.begin(), rasParentRequirements.end());
+
 			//pointer to the action
 			auto pAction = rapAvailableActions[i];
+
 
 			//Make sure the action is valid (no point checking a route if the action cannot be undertaken)
 			if (!pAction->IsValid(pManager))
@@ -162,25 +206,25 @@ bool Planner::GetPlan(Manager* pManager)
 			//find out what the satisfied world state is
 			const auto& sSat = pAction->GetSatWS();
 
-			
-			//check every requirement of the node being looked at
-			for (int j = 0  ; j < rasParentRequirements.size(); j++)
+
+			for (int j = 0; j < rasParentRequirements.size(); j++)
+				//check every requirement of the node being looked at
 			{
+
+
 				//-----------------------------------
 				// Set up appropriate variables
 				//-----------------------------------
 
 				//create a copy of the parents requirement list
-				auto asParentReqList = rasParentRequirements;
 
 
 				//get one of the requirements
-				auto& sReq = rasParentRequirements[i];
+				auto& sReq = rasParentRequirements[j];
 
-				//Get a reference to the current world state
-				auto& rCurrentWS = pManager->GetCurrentWS();
 
-				
+
+
 
 
 				//-----------------------------------
@@ -197,7 +241,32 @@ bool Planner::GetPlan(Manager* pManager)
 					if (iter->second)
 					{
 						//if the required world state is already met, continue
-						auto it = std::remove(asParentReqList.begin(), asParentReqList.end(), iter->first);
+						auto it = std::remove(rapReqList.begin(), rapReqList.end(), iter->first);
+
+						rapReqList.erase(it, rapReqList.end());
+
+						if (rapReqList.empty())
+						{
+
+							//Create the node
+							pNewNode->Initialise(pAction, pNode, static_cast<float>(rapReqList.size()));
+
+							pNewNode->AddReqWS(rapReqList);
+
+							//Add node to the tree
+							m_pTree->AddNode(pNewNode, pNode);
+
+							//Add it to the open list
+							m_pOpenList->Add(pNewNode);
+
+							pNode = pNewNode;
+
+							bPlanFound = true;
+						
+							bExit = true;
+						}
+
+
 						continue;
 					}
 				}
@@ -208,29 +277,50 @@ bool Planner::GetPlan(Manager* pManager)
 				if (sSat == sReq)
 				{
 					//erase this requirement off the list of requirements
-					for (int k = 0 ; k < asParentReqList.size(); k++)
+					for (int k = 0; k < rapReqList.size(); k++)
 					{
-						if (asParentReqList[k] == sSat)
+						if (rapReqList[k] == sSat)
 						{
-							asParentReqList.erase(asParentReqList.begin() + k);
+							rapReqList.erase(rapReqList.begin() + k);
 						}
 					}
 
 					//Create the node
-					auto pNewNode = new Node(pAction,pNode, static_cast<float>(asParentReqList.size()));
+					pNewNode->Initialise(pAction, pNode, static_cast<float>(rapReqList.size()));
 
-					//Add the left over requirements to the child node
-					pNewNode->AddReqWS(asParentReqList);
+					pNewNode->AddReqWS(rapReqList);
 
-					//Add node to the tree 
+					//Add node to the tree
 					m_pTree->AddNode(pNewNode, pNode);
 
 					//Add it to the open list
 					m_pOpenList->Add(pNewNode);
-					
+
+					bReturn = false;
+
+				}
+				if (bExit)
+				{
+					break;
 				}
 			}
+
+			if (bExit)
+			{
+				break;
+			}
+
+			if (bReturn)
+			{
+				m_pNodePool->Return(pNewNode);
+			}
 		}
+
+		if (bExit)
+		{
+			break;
+		}
+		
 	}
 
 
@@ -259,29 +349,96 @@ bool Planner::GetPlan(Manager* pManager)
 			pNode = pNode->GetParent();
 
 		}
+	}
+		//then return true
+		return !rapPlan.empty();
+}
+
+/*
+*
+* 
+		//for every requirement
+		for (auto& rsReq : rasParentRequirements)
+		{
+			if (rsReq == "")
+			{
+				continue;
+			}
+
+			//see if the parents requirement is already met
+			auto iter = rCurrentWS.find(rsReq);
+
+			//if the world state requirement of parent exists, then we need to check if its true
+			if (iter != rCurrentWS.end())
+			{
+				//if the world state is true, then there
+				if (iter->second)
+				{
+					//if the required world state is already met, continue
+					auto it = std::remove(asActionRequirementsLeft.begin(), asActionRequirementsLeft.end(), iter->first);
+
+					asActionRequirementsLeft.erase(it, asActionRequirementsLeft.end());
+
+					if (asActionRequirementsLeft.empty())
+					{
+						bPlanFound = true;
+						bExit = true;
+						break;
+					}
+					continue;
+				}
+			}
+
+			
+
+			//for every available action
+			for (auto pAction : rapAvailableActions)
+			{
+
+				//Make sure the action is valid (no point checking a route if the action cannot be undertaken)
+				if (!pAction->IsValid(pManager))
+				{
+					continue;
+				}
 
 
 
-	
-	
+				auto& rsSat = pAction->GetSatWS();
+
+				if (rsSat == rsReq)
+				{
+					//erase this requirement off the list of requirements
+					for (int k = 0; k < asActionRequirementsLeft.size(); k++)
+					{
+						if (asActionRequirementsLeft[k] == rsSat)
+						{
+							asActionRequirementsLeft.erase(asActionRequirementsLeft.begin() + k);
+						}
+					}
+
+					//Create the node
+					auto pNewNode = m_pNodePool->GetNode();
+					pNewNode->Initialise(pAction, pNode, static_cast<float>(asActionRequirementsLeft.size()));
 
 
+					//Add the left over requirements to the child node
+					pNewNode->AddReqWS(asActionRequirementsLeft);
+					
+
+					//Add node to the tree 
+					m_pTree->AddNode(pNewNode, pNode);
+
+					//Add it to the open list
+					m_pOpenList->Add(pNewNode);
+				}
+			}
+		}
+		
+		if (bExit)
+		{
+			break;
+		}
 		
 
 
-	}
-
-
-	
-		//then return true
-		return !rapPlan.empty();
-	
-
-
-
-	
-
-	
-
-}
-
+*/

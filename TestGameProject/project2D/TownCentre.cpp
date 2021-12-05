@@ -49,8 +49,6 @@ void TownCentre::Update(float fDeltaTime)
 
 	if (!m_aActionQueue.empty())
 	{
-		if (m_aActionQueue[0])
-		{
 			if (m_fTimer > 0.0f)
 			{
 				m_fTimer += fDeltaTime;
@@ -61,7 +59,7 @@ void TownCentre::Update(float fDeltaTime)
 			}
 
 
-			auto eType = m_aActionQueue[0]->GetIconType();
+			auto eType = m_aActionQueue[0];
 
 			switch (eType)
 			{
@@ -104,7 +102,6 @@ void TownCentre::Update(float fDeltaTime)
 				}
 				break;
 			}
-		}
 	}
 }
 
@@ -119,7 +116,7 @@ float TownCentre::GetProgress()
 {
 	if (!m_aActionQueue.empty())
 	{
-		switch (m_aActionQueue[0]->GetIconType())
+		switch (m_aActionQueue[0])
 		{
 		case Icon::IType::Villager:
 			return m_fTimer / m_fVillagerTime;

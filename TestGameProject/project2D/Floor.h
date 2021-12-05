@@ -40,6 +40,12 @@ public:
 	//-----------------------------------
 	Tile* PosToTile(Vector2 v2Position);
 
+
+	//-----------------------------------
+	// 	Tells you whether you can building
+	// 	something at this location
+	//-----------------------------------
+	bool CanBuildAt(Vector2 v2Position);
 private:
 	Vector2 m_v2StartPos;
 

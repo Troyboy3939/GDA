@@ -2,6 +2,7 @@
 #include <vector>
 #include <unordered_map>
 #include <map>
+#include "NodePool.h"
 
 class Tree;
 class Heap;
@@ -34,6 +35,8 @@ private:
 	//data structures for finding the plan
 	Tree* m_pTree;
 	Heap* m_pOpenList;
-	std::unordered_map<Node*, bool>* m_pClosedList;
+	std::unordered_map<Node*, bool> m_ClosedList;
+	NodePool* m_pNodePool;
+
 };
 

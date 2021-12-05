@@ -568,6 +568,21 @@ Building* Empire::AddBuilding(Building::BType eType, Vector2 v2Location)
 		return nullptr;
 }
 
+TownCentre* Empire::GetTownCentre()
+{
+	for (auto pBuilding : m_apBuildings)
+	{
+		if (pBuilding && pBuilding->GetBuildingType() == Building::BType::TownCentre)
+		{
+			return static_cast<TownCentre*>(pBuilding);
+		}
+	}
+
+
+
+	return nullptr;
+}
+
 void Empire::UpgradeUnit(Icon::IType eUpgrade)
 {
 
@@ -708,6 +723,20 @@ void Empire::ReturnBuilding(Building* pUnit)
 	m_pBuildPool->Return(pUnit);
 }
 
+bool Empire::HasBuilding(Building::BType eType)
+{
+	for (auto pBuilding : m_apBuildings)
+	{
+		if (pBuilding && pBuilding->GetBuildingType() == eType)
+		{
+			return true;
+		}
+	}
+
+
+	return false;
+}
+
 int Empire::GetAge()
 {
 	return m_nAge;
@@ -721,6 +750,50 @@ void Empire::SetAge(int nAge)
 	{
 		m_nAge = 3;
 	}
+}
+
+Unit* Empire::GetLatestUnit(Unit::UType eType)
+{
+	for (int i = m_apUnits.size() - 1; i >= 0; i--)
+	{
+		if (m_apUnits[i] && m_apUnits[i]->GetUnitType() == eType)
+		{
+			return m_apUnits[i];
+		}
+	}
+
+
+	return nullptr;
+}
+
+int Empire::GetUnitCount()
+{
+	return m_apUnits.size();
+}
+
+std::vector<Unit*>& Empire::GetUnits()
+{
+	return m_apUnits;
+}
+
+Villager* Empire::GetIdleVillager()
+{
+
+	for (auto pUnit :  m_apUnits)
+	{
+		if (pUnit && pUnit->GetUnitType() == Unit::UType::Villager)
+		{
+			auto pVill = static_cast<Villager*>(pUnit);
+
+			if (pVill->GetState() == Villager::State::Idle)
+			{
+				return pVill;
+			}
+		}
+	}
+
+
+	return nullptr;
 }
 
 

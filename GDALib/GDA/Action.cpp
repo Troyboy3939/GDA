@@ -4,13 +4,26 @@
 
 
 
-Action::Action(float fCost, std::function<bool(Manager* pManager)>* pIsValidFuction, std::string& rsType, void* pData)
+Action::Action(float fCost, std::function<bool(Manager* pManager)>& rfnIsValidFuction, const std::string& rsSatWS, std::initializer_list<std::string> asReq, const std::string& rsType, void* pData)
 {
     m_fCost = fCost;
-    m_pIsValid = pIsValidFuction;
+    m_pIsValid = std::move(rfnIsValidFuction);
 
     m_pData = pData;
     m_sDataType = rsType;
+}
+
+Action::Action(float fCost, std::function<bool(Manager* pManager)>& rfnIsValidFuction, const std::string& rsSatWS, std::initializer_list<std::string> asReq)
+{
+    m_fCost = fCost;
+    m_pIsValid = std::move(rfnIsValidFuction);
+
+    m_pData = nullptr;
+    m_sDataType = "void*";
+
+    m_sSatWorldState = std::move(rsSatWS);
+
+    m_asReqWorldState.insert(m_asReqWorldState.begin(), asReq);
 }
 
 float Action::GetCost()
@@ -36,7 +49,7 @@ bool Action::IsValid(Manager* pManager)
 {
     if (m_pIsValid)
     {
-        return (*m_pIsValid)(pManager);
+        return m_pIsValid(pManager);
     }
 
     return false;
@@ -60,5 +73,15 @@ void Action::SetData(void* pData)
 void Action::SetDataType(std::string& rsType)
 {
     m_sDataType = rsType;
+}
+
+void Action::SetID(int nID)
+{
+    m_nID = nID;
+}
+
+int Action::GetID()
+{
+    return m_nID;
 }
 

@@ -39,7 +39,7 @@ void Stable::Update(float fDeltaTime)
 
 
 
-		switch (pAction->GetIconType())
+		switch (pAction)
 		{
 		case Icon::IType::CavAtt:
 		case Icon::IType::CavSpe:
@@ -55,7 +55,7 @@ void Stable::Update(float fDeltaTime)
 
 				if (m_fTimer >= m_fUpgradeTime)
 				{
-					m_pTeam->UpgradeUnit(pAction->GetIconType());
+					m_pTeam->UpgradeUnit(pAction);
 					m_fTimer = -1.0f;
 
 					//erase this element off the queue
@@ -82,7 +82,7 @@ void Stable::Update(float fDeltaTime)
 				{
 					Unit::UType eUnit;
 
-					if (pAction->GetIconType() == Icon::IType::Scout)
+					if (pAction == Icon::IType::Scout)
 					{
 						eUnit = Unit::UType::Scout;
 					}
@@ -116,7 +116,7 @@ float Stable::GetProgress()
 {
 	if (!m_aActionQueue.empty())
 	{
-		switch (m_aActionQueue[0]->GetIconType())
+		switch (m_aActionQueue[0])
 		{
 		case Icon::IType::Scout:
 		case Icon::IType::Knight:

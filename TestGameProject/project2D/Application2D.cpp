@@ -93,7 +93,7 @@ void Application2D::shutdown()
 
 void Application2D::update(float fDeltaTime)
 {
-
+	fDeltaTime *= 3;
 	m_timer += fDeltaTime;
 
 	// input example

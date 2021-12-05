@@ -45,7 +45,7 @@ using Neighbours = std::vector<Tile*>;
 	Vector2 GetPosition();
 
 
-	Neighbours& GetNeighours();
+	Neighbours& GetNeighbours();
 
 	Tile* GetNeighbour(Connection eTile);
 

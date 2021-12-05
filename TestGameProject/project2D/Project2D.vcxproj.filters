@@ -117,6 +117,12 @@
     <ClCompile Include="Pikeman.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EcoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MilitaryManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application2D.h">
@@ -210,6 +216,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Pikeman.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EcoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MilitaryManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

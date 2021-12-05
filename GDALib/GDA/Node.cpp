@@ -1,6 +1,6 @@
 #include "Node.h"
 #include "Action.h"
-
+#include "Goal.h"
 
 
 Node::Node(Action* pAction, Node* pParent, float fHScore, Goal* pGoal)
@@ -9,20 +9,57 @@ Node::Node(Action* pAction, Node* pParent, float fHScore, Goal* pGoal)
 	m_pGoal = pGoal;
 	m_pParent = pParent;
 
-	m_asReqWS = pAction->GetReqWS();
 
+	
 
 	if (m_pAction)
 	{
+		m_asReqWS = pAction->GetReqWS();
 		m_fGScore = m_pAction->GetCost();
 
 		m_fHScore = fHScore;
 	}
 	else
 	{
+		m_asReqWS.push_back(pGoal->GetRequiredWorldState());
 		m_fGScore = 0;
 		m_fHScore = 0;
 	}
+}
+
+Node::Node()
+{
+	m_fGScore = 0.0f;
+	m_fHScore = 0.0f;
+	m_pAction = nullptr;
+	m_pGoal = nullptr;
+	m_pParent = nullptr;
+
+}
+
+void Node::Initialise(Action* pAction, Node* pParent, float fHScore, Goal* pGoal)
+{
+	m_pAction = pAction;
+	m_pGoal = pGoal;
+	m_pParent = pParent;
+
+
+
+
+	if (m_pAction)
+	{
+		m_asReqWS = pAction->GetReqWS();
+		m_fGScore = m_pAction->GetCost();
+
+		m_fHScore = fHScore;
+	}
+	else
+	{
+		m_asReqWS.push_back(pGoal->GetRequiredWorldState());
+		m_fGScore = 0;
+		m_fHScore = 0;
+	}
+
 }
 
 void Node::SetParent(Node* pNode)

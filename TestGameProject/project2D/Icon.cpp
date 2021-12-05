@@ -10,6 +10,9 @@ Icon::Icon(Vector2 v2Position, IType eType)
 
 	m_bSelected = false;
 
+	m_nRequiredAge = 0;
+	m_pTexture = nullptr;
+
 	m_fFoodCost = 0.0f;
 	m_fWoodCost = 0.0f;
 	m_fGoldCost = 0.0f;
@@ -128,7 +131,6 @@ Icon::Icon(Vector2 v2Position, IType eType)
 		m_sText = "This advances your empire to the next age, giving you access to more buildings and units";
 
 		m_pTexture = new aie::Texture("Textures/AgeUpIcon.png");
-
 
 		m_fFoodCost = 500.0f;
 		m_fWoodCost = 0.0f;
@@ -372,7 +374,7 @@ void Icon::Press(Building* pBuilding)
 			return;
 		}
 
-		pBuilding->AddActionToQueue(this);
+		pBuilding->AddActionToQueue(m_eIconType);
 	}
 }
 

@@ -128,6 +128,16 @@ void Blackboard::HandleMessage(Message* pMessage)
 				GoalFormulator(pManager);
 			}
 		}
+		else if (rsMessage == "Get World State")
+		{
+			if (pMessage->GetDataType() == "Manager*")
+			{
+				//Get pointer to manager
+				auto pManager = static_cast<Manager*>(pMessage->GetData());
+
+				pManager->GetCurrentWS() = m_aWorldState;
+			}
+		}
 	}
 }
 
@@ -215,6 +225,22 @@ Goal* Blackboard::GetResponse(std::string& rsExplanation, Manager* pManager)
 
 
 	return nullptr;
+}
+
+std::unordered_map<std::string, bool>& Blackboard::GetWorldState()
+{
+	return m_aWorldState;
+}
+
+void Blackboard::UpdateWorldState(const std::string& rsWS, bool bValue)
+{
+	m_aWorldState.insert_or_assign(rsWS,bValue);
+
+}
+
+bool Blackboard::GetWorldStateValue(const std::string& rsWS)
+{
+	return m_aWorldState[rsWS];
 }
 
 

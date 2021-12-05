@@ -7,10 +7,9 @@
 BuildingPool::BuildingPool(int nDefaultAmount)
 {
 	//Reserve enough for each unit
-	//m_apPool.reserve(static_cast<int>(Unit::UType::NoUnitTypes) * nAmountPerUnit);
+	m_apPool.reserve(static_cast<int>(Building::BType::NoTypes) * nDefaultAmount);
 
-	//Reserve enough for Villager DELETE THIS LATER, USE ABOVE LINE
-	m_apPool.reserve(nDefaultAmount);
+	
 
 	//Create units
 	for (int i = 0; i < nDefaultAmount; i++)

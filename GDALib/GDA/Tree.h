@@ -5,7 +5,7 @@
 class Action;
 class Goal;
 class Node;
-
+class NodePool;
 class Tree
 {
 public:
@@ -31,7 +31,7 @@ public:
 	//----------------------------------------
 	//Clears the entire tree
 	//----------------------------------------
-	void Clear();
+	void Clear(NodePool* pNodePool);
 
 
 	//----------------------------------------
@@ -47,7 +47,7 @@ public:
 private:
 	Node* m_pRootNode;
 
-	void Delete(Node* pNode);
+	void Delete(Node* pNode, NodePool* pNodePool);
 
 };
 

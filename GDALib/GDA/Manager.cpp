@@ -14,7 +14,13 @@ Manager::Manager(Blackboard* pBlackboard, Goal* pDefaultGoal) : Messenger(pBlack
 	//Set up the director
 	m_pDirector = new Director(this,0);
 
+	m_pMitigation = nullptr;
+
+	m_pObserver = new Observer(this);
+
 	m_bNewGoal = false;
+
+	m_nCurrentAction = 0;
 
 	//if it exists
 	if(m_pBlackboard)
@@ -25,10 +31,7 @@ Manager::Manager(Blackboard* pBlackboard, Goal* pDefaultGoal) : Messenger(pBlack
 	//Choose a goal to 
 	m_pGoal = pDefaultGoal;
 
-	if (!pDefaultGoal)
-	{
-		m_pDirector->PickGoal();
-	}
+
 	
 	m_anMessageToID.push_back(0);
 
@@ -40,7 +43,10 @@ Manager::Manager(Blackboard* pBlackboard, Goal* pDefaultGoal) : Messenger(pBlack
 	m_pMitigationMessage = new Message(m_anMessageToID,"Mitigation",this,"Manager*");
 
 
-	
+	if (!pDefaultGoal)
+	{
+		m_pDirector->PickGoal();
+	}
 }
 
 Manager::~Manager()
@@ -49,6 +55,12 @@ Manager::~Manager()
 	{
 		delete m_pDirector;
 		m_pDirector = nullptr;
+	}
+
+	if (m_pObserver)
+	{
+		delete m_pObserver;
+		m_pObserver = nullptr;
 	}
 
 	if(m_pCurrentWS)
@@ -74,7 +86,7 @@ void Manager::Update(float fDeltaTime)
 {
 
 	//check that your goal is still valid
-	if (!m_pGoal->IsValid(this) || m_bNewGoal)
+	if (m_pGoal && !m_pGoal->IsValid(this) || m_bNewGoal)
 	{
 		//Get a new goal
 		m_pDirector->PickGoal();
@@ -120,6 +132,7 @@ void Manager::GetNewPlan()
 
 		//Send the message asking for a new plan
 		m_pBlackboard->SendMessage(m_pPlanMessage);
+		m_nCurrentAction = 0;
 	}
 
 }
@@ -155,6 +168,11 @@ Expectations& Manager::GetExpectations()
 	return m_pGoal->GetExpectations();
 }
 
+std::vector<std::string>& Manager::GetExplanations()
+{
+	return m_pObserver->GetExplanations();
+}
+
 Observer* Manager::GetObserver()
 {
 	return m_pObserver;
@@ -179,17 +197,8 @@ std::vector<Goal*>& Manager::GetAvailableGoals()
 
 std::unordered_map<std::string, bool>& Manager::GetCurrentWS()
 {
-	//clear the list of ids
-	m_anMessageToID.clear();
-
-	//make sure this goes to the blackboard
-	m_anMessageToID.push_back(m_pBlackboard->GetID());
-
-	//Send message to blackboard, asking for the current world state
-	m_pBlackboard->SendMessage(m_pCurrentWS);
-
 	//return updated world state
-	return m_aCurrentWS;
+	return m_pBlackboard->GetWorldState();
 }
 
 std::unordered_map<std::string, bool>& Manager::GetCurrentWSList()

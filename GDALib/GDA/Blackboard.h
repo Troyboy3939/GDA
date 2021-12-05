@@ -28,7 +28,7 @@ public:
     //----------------------
     // Update function, called every frame
     //----------------------
-    void Update(float fDeltaTime);
+    void Update(float fDeltaTime) override;
 
     
     //---------------------
@@ -50,6 +50,11 @@ public:
 
     Goal* GetResponse(std::string& rsExplanation, Manager* pManager);
 
+    std::unordered_map<std::string, bool>& GetWorldState();
+
+    void UpdateWorldState(const std::string& rsWS, bool bValue);
+
+    bool GetWorldStateValue(const std::string& rsWS);
 private:
 
     //----------------------

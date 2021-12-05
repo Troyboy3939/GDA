@@ -20,6 +20,8 @@ Building::Building()
 	m_fGold = 0.0f;
 	
 	m_fHealth = 2000.0f;
+
+	m_pBottomLeft = nullptr;
 }
 
 Building::~Building()
@@ -116,7 +118,7 @@ Tile* Building::GetTile()
 	return m_pBottomLeft;
 }
 
-Icon* Building::GetCurrentAction()
+Icon::IType Building::GetCurrentAction()
 {
 	if (!m_aActionQueue.empty())
 	{
@@ -124,12 +126,12 @@ Icon* Building::GetCurrentAction()
 	}
 
 
-	return nullptr;
+	return Icon::IType::AgeUp;
 }
 
-void Building::AddActionToQueue(Icon* pIcon)
+void Building::AddActionToQueue(Icon::IType eIcon)
 {
-	m_aActionQueue.push_back(pIcon);
+	m_aActionQueue.push_back(eIcon);
 }
 
 int Building::GetActionsLeft()
@@ -187,7 +189,7 @@ void Building::TurnTilesOff()
 	
 	if (m_pBottomLeft)
 	{
-		auto& rapNeigh = m_pBottomLeft->GetNeighours();
+		auto& rapNeigh = m_pBottomLeft->GetNeighbours();
 
 
 		if (rapNeigh[static_cast<int>(Tile::Connection::TopRight)])
